@@ -14,6 +14,8 @@ or if you already started your project using the tool `create-react-native-app` 
 
 More info can be found in the [official docs](https://facebook.github.io/react-native/docs/getting-started.html)
 
+Before moving to the next point compile your project and ensure you can execute the project as expected. In this way we can discard future bugs from the Bugfender SDK. 
+
 ## Adding Bugfender to your project 
 
 `$ cd path_to_your_project`
