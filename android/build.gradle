@@ -1,0 +1,38 @@
+buildscript {
+  repositories {
+    jcenter()
+    maven { url 'https://maven.google.com' }
+  }
+
+  dependencies {
+    classpath 'com.android.tools.build:gradle:3.2.1'
+  }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion 28
+  buildToolsVersion '28.0.3'
+
+  defaultConfig {
+    minSdkVersion 9
+    targetSdkVersion 28
+    versionCode 1
+    versionName "1.0"
+  }
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+repositories {
+  jcenter()
+  google()
+}
+
+dependencies {
+  implementation 'com.facebook.react:react-native:+'
+  implementation 'com.bugfender.sdk:android:1.+'
+}

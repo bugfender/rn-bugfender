@@ -1,0 +1,25 @@
+{
+  "name": "@bugfender/rn-bugfender",
+  "version": "0.9",
+  "description": "React Native bindings for Bugfender SDK",
+  "main": "bugfender.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bugfender/rn-bugfender.git"
+  },
+  "keywords": [
+    "bugfender",
+    "logging",
+    "debug"
+  ],
+  "author": "Bugfender",
+  "license": "ISC",
+  "homepage": "https://github.com/bugfender/rn-bugfender.git#readme",
+  "dependencies": {}
+}
