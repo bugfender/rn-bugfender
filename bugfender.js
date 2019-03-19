@@ -6,7 +6,28 @@ import {
 var Bugfender = NativeModules.RNBugfender;
 
 export default {
-  init: (token, debug = true) => Platform.OS === 'ios' ? Bugfender.activateLogger(token) : Bugfender.init(token, debug),
+  init: (token, debug = true)  => {
+    // Library initialization
+    Platform.OS === 'ios' ? Bugfender.activateLogger(token) : Bugfender.init(token, debug)
+
+    // Javascript crash reporting configuration
+    const oldErrorHandler = global.ErrorUtils.getGlobalHandler()
+
+    const errorHandler = (error, isFatal) => {
+          var errorDetails;
+          if(typeof error.stack === 'undefined') {
+            errorDetails = error.message
+          } else {
+            errorDetails =  error.stack
+          }
+
+          Bugfender.sendCrash (error.name + ": " + error.message, errorDetails);
+          oldErrorHandler(error,isFatal)
+        }
+
+    global.ErrorUtils.setGlobalHandler(errorHandler);
+    console.error = (message, error) => global.ErrorUtils.reportError(error); // sending console.error so that it can be caught
+  },
 
   setApiUrl: apiUrl => Bugfender.setApiUrl(apiUrl),
 
@@ -39,6 +60,8 @@ export default {
   log: (lineNumber, method, file, loglevel, tag, message) => Bugfender.log(lineNumber, method, file, loglevel, tag, message),
 
   sendIssue: (title, text) => Bugfender.sendIssue(title, text),
+
+  sendCrash: (title, text) => Bugfender.sendCrash(title, text),
 
   sendUserFeedback: (title, text) => Bugfender.sendUserFeedback(title, text),
 

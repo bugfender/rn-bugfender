@@ -21,18 +21,34 @@ export default class AppComponent extends Component {
           Welcome to RN Bugfender Example!
         </Text>
         <Text style={styles.instructions}>
-          This application sends directly logs to the server if you push the screen
+          This application sends directly logs to the server if you push "Send Logs" button      
+        </Text>
+        <Text style={styles.instructions}>
+          Pressing "Generate JS Crash" the application will crash due to a JavaScript error and the crash information will be sent to the server.      
         </Text>
         <Text style={styles.instructions}>
           Double tap R on your keyboard to reload,{'\n'}
           Shake or press menu button for dev menu
         </Text>
-        <Button
+        <View style={styles.button}>
+        <Button 
             onPress={this._onPressButton}
             title="Send logs"
           />
+       </View>
+       <View style={styles.button}>
+        <Button
+            onPress={this._generateError}
+            title="Generate JS crash"
+          />
+       </View>
       </View>
     );
+  }
+
+  _generateError = () => {
+    var test;
+    test.color; //This will generate a TypeError: undefined that will be sent to Bugfender
   }
 
   _onPressButton() {
@@ -91,6 +107,9 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  button: {
+    marginBottom: 5,
+  }
 });
 
 AppRegistry.registerComponent('App', () => AppComponent);
