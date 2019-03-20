@@ -18,7 +18,7 @@ export default {
           if(typeof error.stack === 'undefined') {
             errorDetails = error.message
           } else {
-            errorDetails =  error.stack
+            errorDetails = "```\n" + error.stack + "\n```"
           }
 
           Bugfender.sendCrash (error.name + ": " + error.message, errorDetails);
