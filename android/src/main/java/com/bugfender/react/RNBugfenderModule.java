@@ -104,6 +104,11 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void sendCrash(String title, String text) {
+    Bugfender.sendCrash(title, text);
+  }
+
+  @ReactMethod
   public void sendUserFeedback(String title, String text) {
     Bugfender.sendUserFeedback(title, text);
   }
