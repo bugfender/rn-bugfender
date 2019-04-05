@@ -21,7 +21,7 @@ export default {
             errorDetails = "```\n" + error.stack + "\n```"
           }
 
-          Bugfender.sendCrash (error.name + ": " + error.message, errorDetails);
+          // Bugfender.sendCrash (error.name + ": " + error.message, errorDetails);
           oldErrorHandler(error,isFatal)
         }
 
