@@ -96,7 +96,12 @@ RCT_EXPORT_METHOD(log:(int)lineNumber method:(NSString *)method file:(NSString *
 
 RCT_EXPORT_METHOD(sendIssue:(NSString *)tag text:(NSString *)text)
 {
-    [Bugfender sendIssueWithTitle:tag text:text];
+    [Bugfender sendIssueReturningUrlWithTitle:tag text:text];
+}
+
+RCT_EXPORT_METHOD(sendCrash:(NSString *)title text:(NSString *)text)
+{
+    [Bugfender sendCrashWithTitle:title text:text];
 }
 
 RCT_EXPORT_METHOD(forceSendOnce)
@@ -106,7 +111,12 @@ RCT_EXPORT_METHOD(forceSendOnce)
 
 RCT_EXPORT_METHOD(sendUserFeedback:(NSString *)title text:(NSString *)text)
 {
-    [Bugfender sendUserFeedbackWithSubject:title message:text];
+    [Bugfender sendUserFeedbackReturningUrlWithSubject:title message:text];
+}
+
+RCT_EXPORT_METHOD(auxNativeCode)
+{
+    @[][0];
 }
 
 - (dispatch_queue_t)methodQueue
