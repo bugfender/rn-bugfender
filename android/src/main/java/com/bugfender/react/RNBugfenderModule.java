@@ -2,9 +2,12 @@ package com.bugfender.react;
 
 import com.bugfender.sdk.Bugfender;
 import com.bugfender.sdk.LogLevel;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+
+import java.net.URL;
 
 public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
@@ -34,7 +37,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void setMaximumLocalStorageSize(Integer sizeInMB) {
-    Bugfender.setMaximumLocalStorageSize(sizeInMB);
+    Bugfender.setMaximumLocalStorageSize(sizeInMB * 1024);
   }
 
   @ReactMethod
@@ -99,23 +102,38 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void sendIssue(String title, String text) {
-    Bugfender.sendIssue(title, text);
+  public void sendIssue(String title, String text, Promise promise) {
+    URL url = Bugfender.sendIssueReturningUrl(title, text);
+    promise.resolve(url != null ? url.toString() : null);
   }
 
   @ReactMethod
-  public void sendCrash(String title, String text) {
-    Bugfender.sendCrash(title, text);
+  public void sendCrash(String title, String text, Promise promise) {
+    URL url = Bugfender.sendCrash(title, text);
+    promise.resolve(url != null ? url.toString() : null);
   }
 
   @ReactMethod
-  public void sendUserFeedback(String title, String text) {
-    Bugfender.sendUserFeedback(title, text);
+  public void sendUserFeedback(String title, String text, Promise promise) {
+    URL url = Bugfender.sendUserFeedbackReturningUrl(title, text);
+    promise.resolve(url != null ? url.toString() : null);
   }
 
   @ReactMethod
   public void forceSendOnce() {
     Bugfender.forceSendOnce();
+  }
+
+  @ReactMethod
+  public void getDeviceUrl(Promise promise) {
+    URL url = Bugfender.getDeviceUrl();
+    promise.resolve(url != null ? url.toString() : null);
+  }
+
+  @ReactMethod
+  public void getSessionUrl(Promise promise) {
+    URL url = Bugfender.getSessionUrl();
+    promise.resolve(url != null ? url.toString() : null);
   }
 
   private static LogLevel parseLogLevel(String loglevel) {

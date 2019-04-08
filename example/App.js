@@ -52,40 +52,45 @@ export default class AppComponent extends Component {
   }
 
   _onPressButton() {
-    Bugfender.d("REACT", "Im being called from React!");
+        Bugfender.d("REACT", "Im being called from React!");
 
     Bugfender.d ("Bugfender", "Log without break lines in the middle of the message");
     Bugfender.d ("Bugfender", "Log with break lines \n\n in the middle of the message");
-		Bugfender.d (null, "Log with tag as null");
-		Bugfender.d ("Bugfender", "Normal log");
-		Bugfender.d ("Bugfender", null);
-		Bugfender.d (null, null);
+	Bugfender.d (null, "Log with tag as null");
+	Bugfender.d ("Bugfender", "Normal log");
+	Bugfender.d ("Bugfender", null);
+	Bugfender.d (null, null);
 
-		Bugfender.e ("Bugfender", "Log with break lines \n\n in the middle of the message");
-		Bugfender.e (null, "Log with tag as null");
-		Bugfender.e ("Bugfender", "Normal log");
-		Bugfender.e ("Bugfender", null);
-		Bugfender.e (null, null);
+	Bugfender.e ("Bugfender", "Log with break lines \n\n in the middle of the message");
+	Bugfender.e (null, "Log with tag as null");
+	Bugfender.e ("Bugfender", "Normal log");
+	Bugfender.e ("Bugfender", null);
+	Bugfender.e (null, null);
 
-		Bugfender.w ("Bugfender", "Log with break lines \n\n in the middle of the message");
-		Bugfender.w (null, "Log with tag as null");
-		Bugfender.w ("Bugfender", "Normal log");
-		Bugfender.w ("Bugfender", null);
-		Bugfender.w (null, null);
+	Bugfender.w ("Bugfender", "Log with break lines \n\n in the middle of the message");
+	Bugfender.w (null, "Log with tag as null");
+	Bugfender.w ("Bugfender", "Normal log");
+	Bugfender.w ("Bugfender", null);
+	Bugfender.w (null, null);
 
-		Bugfender.log (1001, "method", "file", "Debug", "tag", "Sending low level log.");
-		Bugfender.log (1001, "method", "file", "Error", "tag", "Sending low level log.");
-		Bugfender.log (1001, "method", "file", "Warning", "tag", "Sending low level log.");
+	Bugfender.log (1001, "method", "file", Bugfender.LogLevel.DEBUG, "tag", "Sending low level log.");
+	Bugfender.log (1001, "method", "file", Bugfender.LogLevel.ERROR, "tag", "Sending low level log.");
+	Bugfender.log (1001, "method", "file", Bugfender.LogLevel.WARNING, "tag", "Sending low level log.");
 
-		Bugfender.setDeviceString ("device.key.string", "fake.string.value");
-		Bugfender.setDeviceBoolean ("device.key.boolean", true);
-		Bugfender.setDeviceFloat ("device.key.float", 101);
-		Bugfender.setDeviceInteger ("device.key.integer", 102);
+	Bugfender.setDeviceString ("device.key.string", "fake.string.value");
+	Bugfender.setDeviceBoolean ("device.key.boolean", true);
+	Bugfender.setDeviceFloat ("device.key.float", 101);
+	Bugfender.setDeviceInteger ("device.key.integer", 102);
 
-		Bugfender.sendIssue ("Issue One", "Issue Message One");
-		Bugfender.sendIssue ("Issue Two", "Issue Message Two");
+    Bugfender.sendIssue ("Issue One", "Issue Message One").then(url =>  console.log(url));
+		Bugfender.sendIssue ("Issue Two", "Issue Message Two").then(url =>  console.log(url));
+    Bugfender.sendIssue ("Issue Three", "Issue Message Three").then(url =>  console.log(url));
 
-		Bugfender.sendUserFeedback ("User feedback", "User feedback message");
+    Bugfender.sendUserFeedback ("User feedback", "User feedback message");
+    
+    Bugfender.getDeviceUrl ().then(url =>  console.log(url));
+
+    Bugfender.getSessionUrl ().then(url =>  console.log(url));
 
   }
 }
