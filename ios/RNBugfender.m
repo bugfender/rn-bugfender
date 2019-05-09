@@ -27,6 +27,18 @@ RCT_EXPORT_METHOD(setMaximumLocalStorageSize:(int)size)
     [Bugfender setMaximumLocalStorageSize:size];
 }
 
+RCT_REMAP_METHOD(getDeviceUrl,
+                 getDeviceUrlWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve([Bugfender deviceIdentifierUrl].absoluteString);
+}
+
+RCT_REMAP_METHOD(getSessionUrl,
+                 getSessionUrlWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve([Bugfender sessionIdentifierUrl].absoluteString);
+}
+
 RCT_EXPORT_METHOD(removeDeviceKey:(NSString *)key)
 {
     [Bugfender removeDeviceKey:key];
@@ -94,14 +106,14 @@ RCT_EXPORT_METHOD(log:(int)lineNumber method:(NSString *)method file:(NSString *
     [Bugfender logWithLineNumber:lineNumber method:method file:file level:logLevel tag:tag message:message];
 }
 
-RCT_EXPORT_METHOD(sendIssue:(NSString *)tag text:(NSString *)text)
+RCT_EXPORT_METHOD(sendIssue:(NSString *)tag text:(NSString *)text urlResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [Bugfender sendIssueReturningUrlWithTitle:tag text:text];
+    resolve([Bugfender sendIssueReturningUrlWithTitle:tag text:text].absoluteString);
 }
 
-RCT_EXPORT_METHOD(sendCrash:(NSString *)title text:(NSString *)text)
+RCT_EXPORT_METHOD(sendCrash:(NSString *)title text:(NSString *)text urlResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [Bugfender sendCrashWithTitle:title text:text];
+    resolve([Bugfender sendCrashWithTitle:title text:text].absoluteString);
 }
 
 RCT_EXPORT_METHOD(forceSendOnce)
@@ -109,14 +121,9 @@ RCT_EXPORT_METHOD(forceSendOnce)
     [Bugfender forceSendOnce];
 }
 
-RCT_EXPORT_METHOD(sendUserFeedback:(NSString *)title text:(NSString *)text)
+RCT_EXPORT_METHOD(sendUserFeedback:(NSString *)title text:(NSString *)text urlResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [Bugfender sendUserFeedbackReturningUrlWithSubject:title message:text];
-}
-
-RCT_EXPORT_METHOD(auxNativeCode)
-{
-    @[][0];
+    resolve([Bugfender sendUserFeedbackReturningUrlWithSubject:title message:text].absoluteString);
 }
 
 - (dispatch_queue_t)methodQueue
