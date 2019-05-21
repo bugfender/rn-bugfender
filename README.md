@@ -34,7 +34,7 @@ This will add the classes of the plugin to your android and iOS projects.
 You are done! 
 
 ### iOS - Cocoapods
-If your iOS project contains a Podfile "react-native link" should have added a new line to your project: 
+If your iOS project contains a Podfile "react-native link" should have added a new line to it like this one: 
 
 `pod 'RNBugfender', :path => '../node_modules/@bugfender/rn-bugfender'`
 
@@ -42,17 +42,23 @@ If your iOS project contains a Podfile "react-native link" should have added a n
 
 **Important** 
 
-The *podspec* of RNBugfender declares React as a dependency. If you don't override this dependency in your Podfile, cocoapods will download and install a new version of React Native in your iOS folder and you will end up with all the libraries duplicated.  
+The *podspec* of RNBugfender declares React as a dependency. If you don't override this dependency in your Podfile with your local RN path, cocoapods will download and install a new version of React Native in your iOS folder and you will end up with all the libraries duplicated.  
 
 In a common React Native project setup you will want to override the React dependency adding this line to your Podfile: 
 
 `pod 'React', path: '../node_modules/react-native'`
+
+In order to avoid different errors during the linking and compiling phases we provide you with a [suggested Podfile](#suggested-podfile) at the end of this document that might avoid you some headache. 
+We strongly recommend you to use it. 
 
 Now you can go to the console and run 
 
 `$ pod install`
 
 When the installation has finished you should be able to run your project. 
+
+**Remember that you should be using the Xcode workspace instead of the xcodeproj file from now on.**
+
 If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting).
 
 ### iOS - Manual
@@ -102,8 +108,8 @@ We did our best to create a installation process that worked for most of the use
 
 Most of the issues are related to the high number of dependencies and the compatibility between them. As every project is different and has different needs it's difficult to provide a magic receipt that can work, however we find out that the following Podfile compiles and run correctly most of the time. You can use it as a basis to experiment and find a configuration that works for you. 
 
+### Suggested Podfile
 ```
-# Uncomment the next line to define a global platform for your project
 platform :ios, '9.0'
 
 target 'SampleProject' do
