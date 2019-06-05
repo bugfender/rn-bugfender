@@ -14,59 +14,75 @@ or if you already started your project using the tool `create-react-native-app` 
 
 More info can be found in the [official docs](https://facebook.github.io/react-native/docs/getting-started.html)
 
-Before moving to the next point, compile your project and ensure you can execute the project so we can discard future bugs from the Bugfender SDK. 
+Before moving to the next point, **compile your project and ensure you can execute it** so we can discard other errors in the next steps. 
 
 ## Adding Bugfender to your project 
 
 `$ cd path_to_your_project`
 
-Add bugfender plugin from npm 
+**1.** Add the bugfender plugin from npm 
 
 `$ npm install @bugfender/rn-bugfender --save`
 
-Link the library to your project 
+**If you want to use cocoapods, skip the step 2 and go to the 3B. Cocoapods section**. Otherwise, for manual installation, proceed linking RN-Bugfender (2) and then continue with manual installation (3A). 
 
-`$ react-native link @bugfender/rn-bugfender`
-
-This will add the classes of the plugin to your android and iOS projects. 
+**2.** Link to your project
+```
+// Add the classes of the plugin to your android and iOS projects 
+$ react-native link @bugfender/rn-bugfender`
+```
 
 ### Android
 You are done! 
 
-### iOS - Cocoapods
-If your iOS project contains a Podfile "react-native link" should have added a new line to it like this one: 
+### iOS 
+#### 
+
+**3A. Manual installation** 
+
+Download the latest release from [Github](https://github.com/bugfender/BugfenderSDK-iOS/releases) and copy `BugfenderSDK.framework` to `YourAwesomeProjectDirectory/ios` (same directory as AwesomeProject.xcodeproj). Then, follow the instructions to setup your project manually: 
+
+* Go to your **Project** > **Your Target** > **General** > **Linked Frameworks and Libraries** and drag `BugfenderSDK.framework` there (uncheck the "Copy items if needed" checkbox).
+
+* Make sure you have `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` there as well.
+
+* _(If using Swift)_ Import [Bugfender.swift](https://raw.githubusercontent.com/bugfender/BugfenderSDK-iOS/master/swift/Bugfender.swift) helper file to your project. Add an `import BugfenderSDK` statement at the top.
+
+**3B. Cocoapods**
+
+ Ensure your iOS project contains a Podfile, otherwise you need to add it now:
+```
+$ cd path_to_your_project/ios
+$ pod init
+```
+
+Link your project: 
+```
+// Add the classes of the plugin to your android and iOS projects 
+$ react-native link @bugfender/rn-bugfender`
+```
+
+A new line should have been added automatically to your Podfile: 
 
 `pod 'RNBugfender', :path => '../node_modules/@bugfender/rn-bugfender'`
 
-*If your project doesn't contain a Podfile but you want to start using cocoapods head to the [Cocoapods Official Docs](https://guides.cocoapods.org/using/the-podfile.html) to create a Podfile.*
+**Important**: the *podspec* of RNBugfender declares React as a dependency. If you don't override this dependency in your Podfile with your local RN path, cocoapods will download and install a new version of React Native in your iOS folder and you will end up with all the libraries duplicated.  
 
-**Important** 
-
-The *podspec* of RNBugfender declares React as a dependency. If you don't override this dependency in your Podfile with your local RN path, cocoapods will download and install a new version of React Native in your iOS folder and you will end up with all the libraries duplicated.  
-
-In a common React Native project setup you will want to override the React dependency adding this line to your Podfile: 
+In a common React Native project setup you will want to override the React dependency like this: 
 
 `pod 'React', path: '../node_modules/react-native'`
 
-In order to avoid different errors during the linking and compiling phases we provide you with a [suggested Podfile](#suggested-podfile) at the end of this document that might avoid you some headache. 
-We strongly recommend you to use it. 
+But, to avoid different errors during the linking and compiling phases we provide a **[recommended Podfile](#recommended-podfile) at the end of this document**. We strongly recommend you to use it. 
 
-Now you can go to the console and run 
+After configuring the podfile you can now go to the console and run 
 
 `$ pod install`
 
-When the installation has finished you should be able to run your project. 
+When the installation has finished you should be able to run your project in iOS and Android. 
 
 **Remember that you should be using the Xcode workspace instead of the xcodeproj file from now on.**
 
-If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting).
-
-### iOS - Manual
-
-Download the latest release from [Github](https://github.com/bugfender/BugfenderSDK-iOS/releases) and copy `BugfenderSDK.framework` to `YourAwesomeProjectDirectory/ios` (same directory as AwesomeProject.xcodeproj). Then, follow the instructions to setup your project manually: 
-1. Go to your **Project** > **Your Target** > **General** > **Linked Frameworks and Libraries** and drag `BugfenderSDK.framework` there (uncheck the "Copy items if needed" checkbox).
-1. Make sure you have `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` there as well.
-1. _(If using Swift)_ Import [Bugfender.swift](https://raw.githubusercontent.com/bugfender/BugfenderSDK-iOS/master/swift/Bugfender.swift) helper file to your project. Add an `import BugfenderSDK` statement at the top.
+If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting) at the ed of this document.
 
 ## Usage
 ```javascript
@@ -106,9 +122,9 @@ Bugfender.setDeviceInteger ("device.key.integer", 102);
 ## Cocoapods Troubleshooting 
 We did our best to create a installation process that worked for most of the users. However, the React Native configuration can be tricky sometimes.
 
-Most of the issues are related to the high number of dependencies and the compatibility between them. As every project is different and has different needs it's difficult to provide a magic receipt that can work, however we find out that the following Podfile compiles and run correctly most of the time. You can use it as a basis to experiment and find a configuration that works for you. 
+Most of the issues are related to the high number of dependencies and the compatibility between them. As every project is different and has different needs it's difficult to provide a magic receipt that can work out of the box, however we find out that the following Podfile compiles and run correctly most of the time. You can use it as a basis to experiment and find a configuration that works for you. 
 
-### Suggested Podfile
+### Recommended Podfile
 ```
 platform :ios, '9.0'
 
