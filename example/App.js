@@ -12,6 +12,7 @@ export default class AppComponent extends Component {
   constructor(props) {
     super(props);
     Bugfender.init ("YOUR_BUGFENDER_APP_KEY_HERE");
+    Bugfender.enableCrashReporting();
   }
 
   render() {
