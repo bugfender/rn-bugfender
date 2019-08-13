@@ -14,7 +14,8 @@ or if you already started your project using the tool `create-react-native-app` 
 
 More info can be found in the [official docs](https://facebook.github.io/react-native/docs/getting-started.html)
 
-Before moving to the next point, **compile your project and ensure you can execute it** so we can discard other errors in the next steps. 
+Before moving to the next point **compile the project and ensure you can execute**. 
+In this way, we can discard issues in the next steps. 
 
 ## Adding Bugfender to your project 
 
@@ -36,7 +37,7 @@ $ react-native link @bugfender/rn-bugfender`
 You are done! 
 
 ### iOS 
-#### 
+Choose one of the following options: manual installation or cocoapods 
 
 **3A. Manual installation** 
 
@@ -48,15 +49,15 @@ Download the latest release from [Github](https://github.com/bugfender/Bugfender
 
 * _(If using Swift)_ Import [Bugfender.swift](https://raw.githubusercontent.com/bugfender/BugfenderSDK-iOS/master/swift/Bugfender.swift) helper file to your project. Add an `import BugfenderSDK` statement at the top.
 
-**3B. Cocoapods**
+**3B. Cocoapods (recommended)**
 
- Ensure your iOS project contains a Podfile, otherwise you need to add it now:
+1. Ensure your iOS project contains a Podfile, otherwise you need to add it now:
 ```
 $ cd path_to_your_project/ios
 $ pod init
 ```
 
-Link your project: 
+2. Link your project: 
 ```
 // Add the classes of the plugin to your android and iOS projects 
 $ react-native link @bugfender/rn-bugfender`
@@ -66,21 +67,21 @@ A new line should have been added automatically to your Podfile:
 
 `pod 'RNBugfender', :path => '../node_modules/@bugfender/rn-bugfender'`
 
-**Important**: the *podspec* of RNBugfender declares React as a dependency. If you don't override this dependency in your Podfile with your local RN path, cocoapods will download and install a new version of React Native in your iOS folder and you will end up with all the libraries duplicated.  
-
-In a common React Native project setup you will want to override the React dependency like this: 
-
-`pod 'React', path: '../node_modules/react-native'`
-
-But, to avoid different errors during the linking and compiling phases we provide a **[recommended Podfile](#recommended-podfile) at the end of this document**. We strongly recommend you to use it. 
-
-After configuring the podfile you can now go to the console and run 
+3. After configuring the podfile you can now go to the console and run 
 
 `$ pod install`
 
 When the installation has finished you should be able to run your project in iOS and Android. 
 
 **Remember that you should be using the Xcode workspace instead of the xcodeproj file from now on.**
+
+**Important**: the *podspec* of RNBugfender declares React as a dependency. Your Podfile must explicitly override that React dependency. Like this: 
+
+`pod 'React', path: '../node_modules/react-native'`
+
+If you created your project with the react-native cli from react-native 0.60 your podfile should be already prepared. For older versions of react-native you must ensure you override it. Otherwise, cocoapods will download and install a new version in your iOS folder and you will end up with all the React libraries duplicated.  
+
+*At the end of this document you can find a **[recommended Podfile](#recommended-podfile)** you can use it as an example*. 
 
 If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting) at the ed of this document.
 
@@ -132,7 +133,7 @@ target 'SampleProject' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for blufProject
+  # Pods for SampleProject
   pod 'AFNetworking'
 
   # Add new pods below this line
