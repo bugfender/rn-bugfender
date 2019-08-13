@@ -25,7 +25,8 @@ In this way, we can discard issues in the next steps.
 
 `$ npm install @bugfender/rn-bugfender --save`
 
-**If you want to use cocoapods, skip the step 2 and go to the 3B. Cocoapods section**. Otherwise, for manual installation, proceed linking RN-Bugfender (2) and then continue with manual installation (3A). 
+**If you want to use cocoapods (recommended), skip the step 2 and go to the step 3B**. 
+For manual installation, proceed with the steps 2 and 3A. 
 
 **2.** Link to your project
 ```
@@ -37,17 +38,15 @@ $ react-native link @bugfender/rn-bugfender`
 You are done! 
 
 ### iOS 
-Choose one of the following options: manual installation or cocoapods 
-
 **3A. Manual installation** 
 
 Download the latest release from [Github](https://github.com/bugfender/BugfenderSDK-iOS/releases) and copy `BugfenderSDK.framework` to `YourAwesomeProjectDirectory/ios` (same directory as AwesomeProject.xcodeproj). Then, follow the instructions to setup your project manually: 
 
 * Go to your **Project** > **Your Target** > **General** > **Linked Frameworks and Libraries** and drag `BugfenderSDK.framework` there (uncheck the "Copy items if needed" checkbox).
 
-* Make sure you have `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` there as well.
+* Make sure you have linked `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` as well.
 
-* _(If using Swift)_ Import [Bugfender.swift](https://raw.githubusercontent.com/bugfender/BugfenderSDK-iOS/master/swift/Bugfender.swift) helper file to your project. Add an `import BugfenderSDK` statement at the top.
+* If you are using Swift, add the [Bugfender.swift](https://raw.githubusercontent.com/bugfender/BugfenderSDK-iOS/master/swift-manual/Bugfender.swift) helper file to your project.
 
 **3B. Cocoapods (recommended)**
 
@@ -79,13 +78,13 @@ When the installation has finished you should be able to run your project in iOS
 
 `pod 'React', path: '../node_modules/react-native'`
 
-If you created your project with the react-native cli from react-native 0.60 your podfile should be already prepared. For older versions of react-native you must ensure you override it. Otherwise, cocoapods will download and install a new version in your iOS folder and you will end up with all the React libraries duplicated.  
+If you created your project with the react-native cli from React Native 0.60 or newer your podfile should be already prepared. For older versions of react-native you must ensure to override it. Otherwise, cocoapods will download and install a new version in your iOS folder and you will end up with all the React libraries duplicated.  
 
-*At the end of this document you can find a **[recommended Podfile](#recommended-podfile)** you can use it as an example*. 
+*At the end of this document you can find a **[recommended podfile](#recommended-podfile)**. You can use it as an example*. 
 
-If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting) at the ed of this document.
+If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting) at the end of this document.
 
-## Usage
+## RNBugfender Usage
 ```javascript
 import Bugfender from '@bugfender/rn-bugfender';
 
