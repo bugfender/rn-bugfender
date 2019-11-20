@@ -45,9 +45,9 @@ export default {
 	 * 
 	 * By default, the limit is 5 MB.
 	 *
-	 * @param {number} sizeInMb Maximum size in bytes. Range accepted is from 1 byte to 50 MB. If the value provided is outside this range, it will be set to 50 MB.
+	 * @param {number} sizeInBytes Maximum size in bytes. Range accepted is from 1 byte to 50 MB. If the value provided is outside this range, it will be set to 50 MB.
 	 */
-  setMaximumLocalStorageSize: sizeInMb => Bugfender.setMaximumLocalStorageSize(sizeInMb),
+  setMaximumLocalStorageSize: sizeInBytes => Bugfender.setMaximumLocalStorageSize(sizeInBytes),
 
   /**
 	 * Remove a device detail.
