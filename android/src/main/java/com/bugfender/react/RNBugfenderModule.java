@@ -1,5 +1,7 @@
 package com.bugfender.react;
 
+import android.app.Application;
+
 import com.bugfender.sdk.Bugfender;
 import com.bugfender.sdk.LogLevel;
 import com.facebook.react.bridge.Promise;
@@ -57,7 +59,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void enableUIEventLogging() {
-    Bugfender.enableUIEventLogging(getCurrentActivity().getApplication());
+	  Bugfender.enableUIEventLogging((Application) getReactApplicationContext().getApplicationContext());
   }
 
   @ReactMethod
