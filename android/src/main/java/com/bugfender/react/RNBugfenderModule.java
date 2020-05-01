@@ -59,7 +59,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void enableUIEventLogging() {
-	  Bugfender.enableUIEventLogging((Application) getReactApplicationContext().getApplicationContext());
+  	Bugfender.enableUIEventLogging((Application) getReactApplicationContext().getApplicationContext());
   }
 
   @ReactMethod
