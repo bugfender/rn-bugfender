@@ -105,7 +105,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void sendIssue(String title, String text, Promise promise) {
-    URL url = Bugfender.sendIssueReturningUrl(title, text);
+    URL url = Bugfender.sendIssue (title, text);
     promise.resolve(url != null ? url.toString() : null);
   }
 
@@ -117,7 +117,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void sendUserFeedback(String title, String text, Promise promise) {
-    URL url = Bugfender.sendUserFeedbackReturningUrl(title, text);
+    URL url = Bugfender.sendUserFeedback (title, text);
     promise.resolve(url != null ? url.toString() : null);
   }
 
