@@ -24,7 +24,7 @@ export default {
 
   /**
 	 * Sets the URL of the API
-   * 
+   *
 	 * Usage of this function is not necessary in the general use case. Please use exclusively when
 	 * directed from technical support. This method must be called before Bugfender.init().
    * @param {string} url - base URL of the Bugfender's dashboard
@@ -32,8 +32,16 @@ export default {
   setApiUrl: apiUrl => Bugfender.setApiUrl(apiUrl),
 
   /**
+	 * Sets the name for the device. If the Device Name is not set, then the platform standard device name will be automatically sent
+   *
+	 * @note This method has to be called prior to activate logger. Otherwise, an exception will be thrown
+   * @param {string} deviceName - Device name that will be send to Bugfender.
+   */
+  overrideDeviceName: value => Bugfender.overrideDeviceName(value),
+
+  /**
 	 * Synchronizes all logs and issues with the server all the time, regardless if this device is enabled or not.
-	 * 
+	 *
 	 * Logs and issues are synchronized continuously while forceEnabled is active.
 	 *
 	 * @param {boolean} enabled - Whether logs and issues should be sent regardless of the Bugfender Console settings.
@@ -42,7 +50,7 @@ export default {
 
   /**
 	 * Set the maximum size to store local log files.
-	 * 
+	 *
 	 * By default, the limit is 5 MB.
 	 *
 	 * @param {number} sizeInBytes Maximum size in bytes. Range accepted is from 1 byte to 50 MB. If the value provided is outside this range, it will be set to 50 MB.
@@ -65,7 +73,7 @@ export default {
 	 * Enable crash reporting tool functionality
 	 */
   enableCrashReporting: () => Bugfender.enableCrashReporting(),
-  
+
   /**
 	 * Logs all actions performed and screen changes in the application, such as button touches, etc...
 	 */
@@ -150,7 +158,7 @@ export default {
 
   /**
 	 * Send a crash. Useful for controlled Exceptions
-   * 
+   *
 	 * @param {string} title - Title for the crash.
 	 * @param {string} text - Additional info for the crash, p.e. the Stack trace. Markdown format is accepted
 	 * @return A Promise with the URL pointing to the crash information on the Bugfender dashboard or null if SDK is not initialized.
@@ -159,7 +167,7 @@ export default {
 
   /**
 	 * Sends user feedback
-   * 
+   *
 	 * @param {string} title - Title for the feedback.
 	 * @param {string} message - Feedback message. Markdown format is accepted
 	 * @return {Promise<string>} A Promise with the URL pointing to the feedback information on the Bugfender dashboard or null if SDK is not initialized.
@@ -168,7 +176,7 @@ export default {
 
   /**
 	 * Synchronizes all logs and issues with the server once, regardless if this device is enabled or not.
-	 * 
+	 *
 	 * Logs and issues are synchronized only once. After that, the logs are again sent according to the enabled flag
 	 * in the Bugfender Console.
 	 */

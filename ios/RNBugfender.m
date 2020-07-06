@@ -22,6 +22,11 @@ RCT_EXPORT_METHOD(setForceEnabled:(BOOL)enabled)
     [Bugfender setForceEnabled:enabled];
 }
 
+RCT_EXPORT_METHOD(overrideDeviceName:(NSString *)deviceName)
+{
+    [Bugfender overrideDeviceName:deviceName];
+}
+
 RCT_EXPORT_METHOD(setMaximumLocalStorageSize:(int)size)
 {
     [Bugfender setMaximumLocalStorageSize:size];
