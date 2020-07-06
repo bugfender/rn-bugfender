@@ -201,5 +201,9 @@ export default {
 	 * Get a URL pointing to the Bugfender dashboard page for the device and current session.
 	 * @return {Promise<string>} A Promise with the URL to the page if the Bugfender sdk is initialized otherwise return null.
 	 */
-  getSessionUrl: () => Bugfender.getSessionUrl()
+  getSessionUrl: () => Bugfender.getSessionUrl(),
+
+  // working on
+  // @return {Promise<string>} A Promise with the URL pointing to the feedback information on the Bugfender dashboard or null if SDK is not initialized.
+  showUserFeedback: () => Bugfender.showUserFeedback()
 };

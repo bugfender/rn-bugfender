@@ -1,5 +1,6 @@
 #import "RNBugfender.h"
 #import <BugfenderSDK/BugfenderSDK.h>
+#import <React/RCTUtils.h>
 
 @implementation RNBugfender
 
@@ -135,6 +136,32 @@ RCT_EXPORT_METHOD(forceSendOnce)
 RCT_EXPORT_METHOD(sendUserFeedback:(NSString *)title text:(NSString *)text urlResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     resolve([Bugfender sendUserFeedbackReturningUrlWithSubject:title message:text].absoluteString);
+}
+
+RCT_EXPORT_METHOD(showUserFeedback:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    UIViewController * controller = [Bugfender userFeedbackViewControllerWithTitle:@"title"
+                                                                              hint:@"hint"
+                                                                subjectPlaceholder:@"subject placeholder"
+                                                                messagePlaceholder:@"message"
+                                                                   sendButtonTitle:@"button title"
+                                                                 cancelButtonTitle:@"Cancel"
+                                                                        completion:^(BOOL feedbackSent, NSURL * _Nullable url) {
+        if (feedbackSent) {
+            resolve(url);
+        } else {
+            reject(0, @"Feedback not sent", [NSError errorWithDomain:@"Bugfender" code:0 userInfo:nil]);
+        }
+    }];
+    
+    UIViewController* vc = RCTPresentedViewController();
+    [vc presentViewController:controller animated:YES completion:nil];
+
+    /*
+     * Another option might be using the window.
+     * But this code might not work for complex native setup, for simple cases, might work
+     * [UIApplication.sharedApplication.delegate.window.rootViewController presentViewController:controller animated:YES completion:nil];
+     */
 }
 
 - (dispatch_queue_t)methodQueue
