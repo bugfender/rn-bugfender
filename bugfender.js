@@ -32,6 +32,15 @@ export default {
   setApiUrl: apiUrl => Bugfender.setApiUrl(apiUrl),
 
   /**
+	 * Sets the URL of the Bugfender Dashboard
+   *
+	 * Usage of this function is not necessary in the general use case. Please use exclusively when
+	 * directed from technical support. This method must be called before Bugfender.init().
+   * @param {string} url - base URL of the Bugfender's dashboard
+   */
+  setBaseURL: baseURL => Bugfender.setBaseURL(baseURL),
+
+  /**
 	 * Sets the name for the device. If the Device Name is not set, then the platform standard device name will be automatically sent
    *
 	 * @note This method has to be called prior to activate logger. Otherwise, an exception will be thrown
