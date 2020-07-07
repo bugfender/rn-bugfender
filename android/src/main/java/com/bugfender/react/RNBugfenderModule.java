@@ -23,8 +23,18 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void overrideDeviceName(String deviceName) {
+    Bugfender.overrideDeviceName(deviceName);
+  }
+
+  @ReactMethod
   public void init(String apiKey, boolean debug) {
     Bugfender.init(getReactApplicationContext(), apiKey, debug);
+  }
+
+  @ReactMethod
+  public void setBaseUrl(String baseUrl) {
+    Bugfender.setBaseUrl(apiUrl);
   }
 
   @ReactMethod
