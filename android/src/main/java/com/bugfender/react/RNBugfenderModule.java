@@ -34,7 +34,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void setBaseUrl(String baseUrl) {
-    Bugfender.setBaseUrl(apiUrl);
+    Bugfender.setBaseUrl(baseUrl);
   }
 
   @ReactMethod
@@ -69,7 +69,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void enableUIEventLogging() {
-  	Bugfender.enableUIEventLogging((Application) getReactApplicationContext().getApplicationContext());
+    Bugfender.enableUIEventLogging(getApplication());
   }
 
   @ReactMethod
@@ -115,7 +115,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void sendIssue(String title, String text, Promise promise) {
-    URL url = Bugfender.sendIssue (title, text);
+    URL url = Bugfender.sendIssue(title, text);
     promise.resolve(url != null ? url.toString() : null);
   }
 
@@ -127,7 +127,7 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void sendUserFeedback(String title, String text, Promise promise) {
-    URL url = Bugfender.sendUserFeedback (title, text);
+    URL url = Bugfender.sendUserFeedback(title, text);
     promise.resolve(url != null ? url.toString() : null);
   }
 

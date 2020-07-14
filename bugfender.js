@@ -38,7 +38,7 @@ export default {
 	 * directed from technical support. This method must be called before Bugfender.init().
    * @param {string} url - base URL of the Bugfender's dashboard
    */
-  setBaseURL: baseURL => Bugfender.setBaseURL(baseURL),
+  setBaseUrl: baseUrl => Bugfender.setBaseUrl(baseUrl),
 
   /**
 	 * Sets the name for the device. If the Device Name is not set, then the platform standard device name will be automatically sent

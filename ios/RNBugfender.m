@@ -18,7 +18,7 @@ RCT_EXPORT_METHOD(setApiUrl:(NSString *)apiUrl)
     [Bugfender setApiURL:url];
 }
 
-RCT_EXPORT_METHOD(setBaseURL:(NSString *)apiUrl)
+RCT_EXPORT_METHOD(setBaseUrl:(NSString *)apiUrl)
 {
     NSURL *url = [NSURL URLWithString:apiUrl];
     [Bugfender setBaseURL:url];
