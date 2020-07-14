@@ -138,19 +138,19 @@ RCT_EXPORT_METHOD(sendUserFeedback:(NSString *)title text:(NSString *)text urlRe
     resolve([Bugfender sendUserFeedbackReturningUrlWithSubject:title message:text].absoluteString);
 }
 
-RCT_EXPORT_METHOD(showUserFeedback:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subjectHint:(NSString *)subjectHint messageHint:(NSString *)messageHint sendButtonText:(NSString *)sendButtonText cancelButtonText:(NSString *)cancelButtonText resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    UIViewController * controller = [Bugfender userFeedbackViewControllerWithTitle:@"title"
-                                                                              hint:@"hint"
-                                                                subjectPlaceholder:@"subject placeholder"
-                                                                messagePlaceholder:@"message"
-                                                                   sendButtonTitle:@"button title"
-                                                                 cancelButtonTitle:@"Cancel"
+    UIViewController * controller = [Bugfender userFeedbackViewControllerWithTitle:title
+                                                                              hint:hint
+                                                                subjectPlaceholder:subjectHint
+                                                                messagePlaceholder:messageHint
+                                                                   sendButtonTitle:sendButtonText
+                                                                 cancelButtonTitle:cancelButtonText
                                                                         completion:^(BOOL feedbackSent, NSURL * _Nullable url) {
         if (feedbackSent) {
             resolve(url);
         } else {
-            reject(0, @"Feedback not sent", [NSError errorWithDomain:@"Bugfender" code:0 userInfo:nil]);
+            reject(0, @"Feedback not sent", nil);
         }
     }];
     

@@ -1,9 +1,12 @@
 package com.bugfender.react;
 
+import android.app.Activity;
 import android.app.Application;
-
+import android.content.Intent;
 import com.bugfender.sdk.Bugfender;
 import com.bugfender.sdk.LogLevel;
+import com.bugfender.sdk.ui.FeedbackActivity;
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -11,10 +14,13 @@ import com.facebook.react.bridge.ReactMethod;
 
 import java.net.URL;
 
-public class RNBugfenderModule extends ReactContextBaseJavaModule {
+public class RNBugfenderModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+
+  private Promise pendingPromise; // Promise that is waiting information that will be available in onActivityResult
 
   public RNBugfenderModule(ReactApplicationContext rc) {
     super(rc);
+    this.getReactApplicationContext().addActivityEventListener(this);
   }
 
   @Override
@@ -148,6 +154,21 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
     promise.resolve(url != null ? url.toString() : null);
   }
 
+  private static final int SHOW_USER_FEEDBACK_REQUEST_CODE = 10001;
+
+  @ReactMethod
+  public void showUserFeedback(String title, String hint, String subjectHint, String messageHint, String sendButtonText, String cancelButtonText,
+      Promise promise) {
+    getCurrentActivity().startActivityForResult(
+        Bugfender.getUserFeedbackActivityIntent(getApplication(), title, hint, subjectHint, messageHint, sendButtonText), SHOW_USER_FEEDBACK_REQUEST_CODE
+    );
+    pendingPromise = promise;
+  }
+
+  private Application getApplication() {
+    return (Application) getReactApplicationContext().getApplicationContext();
+  }
+
   private static LogLevel parseLogLevel(String loglevel) {
     switch (loglevel) {
       case "Debug":
@@ -159,5 +180,20 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule {
       default:
         return null;
     }
+  }
+
+  @Override public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+    if (requestCode == SHOW_USER_FEEDBACK_REQUEST_CODE && pendingPromise != null) {
+      if (resultCode == Activity.RESULT_OK) {
+        pendingPromise.resolve(data.getStringExtra(FeedbackActivity.RESULT_FEEDBACK_URL));
+      } else {
+        pendingPromise.reject("0", "Feedback not sent");
+      }
+      pendingPromise = null;
+    }
+  }
+
+  @Override public void onNewIntent(Intent intent) {
+    // Nothing to do
   }
 }
