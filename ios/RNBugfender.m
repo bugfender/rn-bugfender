@@ -148,7 +148,7 @@ RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subje
                                                                  cancelButtonTitle:cancelButtonText
                                                                         completion:^(BOOL feedbackSent, NSURL * _Nullable url) {
         if (feedbackSent) {
-            resolve(url);
+            resolve(url.absoluteString);
         } else {
             reject(0, @"Feedback not sent", nil);
         }
