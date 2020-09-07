@@ -2,7 +2,7 @@
 
 ## Getting started
 
-The Bugfender bindings for React Native depend on the native iOS and Android Bugfender SDKs. At this moment, it is only possible to integrate Bugfender in a React Native project which includes native code. 
+The Bugfender bindings for React Native depend on the native iOS and Android Bugfender SDKs.
 
 ## Creating a RN new project compatible with Bugfender
 
@@ -18,6 +18,8 @@ Before moving to the next point **compile the project and ensure you can execute
 In this way, we can discard issues in the next steps. 
 
 ## Adding Bugfender to your project 
+
+**Please note:** if you're using Expo for development, be sure to be using the ["bare workflow"](https://docs.expo.io/introduction/managed-vs-bare/#bare-workflow).
 
 `$ cd path_to_your_project`
 
