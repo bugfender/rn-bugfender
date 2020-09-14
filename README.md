@@ -64,6 +64,8 @@ $ pod init
 $ react-native link @bugfender/rn-bugfender`
 ```
 
+Make sure you're targeting at least iOS platform version 10 (specify `platform :ios, '10.0'`).
+
 A new line should have been added automatically to your Podfile: 
 
 `pod 'RNBugfender', :path => '../node_modules/@bugfender/rn-bugfender'`
