@@ -8,7 +8,7 @@ The Bugfender bindings for React Native depend on the native iOS and Android Bug
 
 You can create a new project using 
 
-`$ react-native init AwesomeProject`
+`$ npx react-native init AwesomeProject`
 
 or if you already started your project using the tool `create-react-native-app` you will need to `eject` your project in order to add native modules. 
 
@@ -33,7 +33,7 @@ For manual installation, proceed with the steps 2 and 3A.
 **2.** Link to your project
 ```
 // Add the classes of the plugin to your android and iOS projects 
-$ react-native link @bugfender/rn-bugfender`
+$ npx react-native link @bugfender/rn-bugfender`
 ```
 
 ### Android
@@ -61,7 +61,7 @@ $ pod init
 2. Link your project: 
 ```
 // Add the classes of the plugin to your android and iOS projects 
-$ react-native link @bugfender/rn-bugfender`
+$ npx react-native link @bugfender/rn-bugfender`
 ```
 
 Make sure you're targeting at least iOS platform version 10 (specify `platform :ios, '10.0'`).
