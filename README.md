@@ -48,8 +48,6 @@ Download the latest release from [Github](https://github.com/bugfender/Bugfender
 
 * Make sure you have linked `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` as well.
 
-* If you are using Swift, add the [Bugfender.swift](https://raw.githubusercontent.com/bugfender/BugfenderSDK-iOS/master/swift-manual/Bugfender.swift) helper file to your project.
-
 **3B. Cocoapods (recommended)**
 
 1. Ensure your iOS project contains a Podfile, otherwise you need to add it now:
