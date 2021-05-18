@@ -128,7 +128,7 @@ Most of the issues are related to the high number of dependencies and the compat
 
 ### Recommended Podfile
 ```
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'SampleProject' do
   # Comment the next line if you don't want to use dynamic frameworks
