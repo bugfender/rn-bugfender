@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.author       = package['author']
   s.homepage     = package['homepage']
 
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "10.0"
   s.requires_arc = true
   s.static_framework = true
 
@@ -19,6 +19,6 @@ Pod::Spec.new do |s|
   s.source_files  = 'ios/*.{h,m}'
 
   s.dependency 'React'
-  s.dependency 'BugfenderSDK', '~> 1.9'
+  s.dependency 'BugfenderSDK', '~> 1.10.3'
 
 end
