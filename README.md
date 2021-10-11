@@ -12,7 +12,7 @@ You can create a new project using
 
 or if you already started your project using the tool `create-react-native-app` you will need to `eject` your project in order to add native modules. 
 
-More info can be found in the [official docs](https://facebook.github.io/react-native/docs/getting-started.html)
+More info can be found in the [official docs](https://facebook.github.io/react-native/docs/getting-started)
 
 Before moving to the next point **compile the project and ensure you can execute**. 
 In this way, we can discard issues in the next steps. 
@@ -23,32 +23,23 @@ In this way, we can discard issues in the next steps.
 
 `$ cd path_to_your_project`
 
-**1.** Add the bugfender plugin from npm 
+Add the bugfender plugin from npm 
 
 `$ npm install @bugfender/rn-bugfender --save`
 
-**If you want to use cocoapods (recommended), skip the step 2 and go to the step 3B**. 
-For manual installation, proceed with the steps 2 and 3A. 
+### Android
+If you are using react-native 0.60 or above, you are done! 
 
-**2.** Link to your project
+**If using an older version of react-native** you still need to link the module to your project:
 ```
 // Add the classes of the plugin to your android and iOS projects 
 $ npx react-native link @bugfender/rn-bugfender`
 ```
 
-### Android
-You are done! 
-
 ### iOS 
-**3A. Manual installation** 
+You can finish the installation manually or via CocoaPods (recommended)
 
-Download the latest release from [Github](https://github.com/bugfender/BugfenderSDK-iOS/releases) and copy `BugfenderSDK.framework` to `YourAwesomeProjectDirectory/ios` (same directory as AwesomeProject.xcodeproj). Then, follow the instructions to setup your project manually: 
-
-* Go to your **Project** > **Your Target** > **General** > **Linked Frameworks and Libraries** and drag `BugfenderSDK.framework` there (uncheck the "Copy items if needed" checkbox).
-
-* Make sure you have linked `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` as well.
-
-**3B. Cocoapods (recommended)**
+**CocoaPods (recommended)**
 
 1. Ensure your iOS project contains a Podfile, otherwise you need to add it now:
 ```
@@ -56,7 +47,7 @@ $ cd path_to_your_project/ios
 $ pod init
 ```
 
-2. Link your project: 
+2. Link your project (**only on react-native versions prior 0.60**): 
 ```
 // Add the classes of the plugin to your android and iOS projects 
 $ npx react-native link @bugfender/rn-bugfender`
@@ -80,11 +71,19 @@ When the installation has finished you should be able to run your project in iOS
 
 `pod 'React', path: '../node_modules/react-native'`
 
-If you created your project with the react-native cli from React Native 0.60 or newer your podfile should be already prepared. For older versions of react-native you must ensure to override it. Otherwise, cocoapods will download and install a new version in your iOS folder and you will end up with all the React libraries duplicated.  
+If you created your project with the react-native cli from React Native 0.60 or newer your podfile should be already prepared. For older versions of react-native you must ensure to override it. Otherwise, CocoaPods will download and install a new version in your iOS folder and you will end up with all the React libraries duplicated.  
 
 *At the end of this document you can find a **[recommended podfile](#recommended-podfile)**. You can use it as an example*. 
 
 If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting) at the end of this document.
+
+**Manual installation (alternative to CocoaPods)**
+
+Download the latest release from [Github](https://github.com/bugfender/BugfenderSDK-iOS/releases) and copy `BugfenderSDK.framework` to `YourAwesomeProjectDirectory/ios` (same directory as AwesomeProject.xcodeproj). Then, follow the instructions to setup your project manually:
+
+* Go to your **Project** > **Your Target** > **General** > **Linked Frameworks and Libraries** and drag `BugfenderSDK.framework` there (uncheck the "Copy items if needed" checkbox).
+
+* Make sure you have linked `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` as well.
 
 ## RNBugfender Usage
 ```javascript
@@ -112,6 +111,20 @@ Bugfender.sendIssue ("New issue", "This will create a new issue in Bugfender");
 
 // Send user feedback 
 Bugfender.sendUserFeedback ("New feedback", "This will create a new feedback in Bugfender");
+
+// Show user feedback native screen
+Bugfender.showUserFeedback(
+    'Feedback',
+    'Please send us your feedback',
+    'This is the reason',
+    'This is the full message',
+    'Send',
+    'Cancel',
+).then(url => {
+  console.log('RN: feedback sent with url:', url);
+}).catch(error => {
+  console.log('RN: feedback not sent');
+});
 
 // Set values 
 Bugfender.setDeviceString ("device.key.string", "fake.string.value");
