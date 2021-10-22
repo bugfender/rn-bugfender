@@ -28,13 +28,7 @@ Add the bugfender plugin from npm
 `$ npm install @bugfender/rn-bugfender --save`
 
 ### Android
-If you are using react-native 0.60 or above, you are done! 
-
-**If using an older version of react-native** you still need to link the module to your project:
-```
-// Add the classes of the plugin to your android and iOS projects 
-$ npx react-native link @bugfender/rn-bugfender`
-```
+You are done!
 
 ### iOS 
 You can finish the installation manually or via CocoaPods (recommended)
@@ -46,32 +40,15 @@ You can finish the installation manually or via CocoaPods (recommended)
 $ cd path_to_your_project/ios
 $ pod init
 ```
-
-2. Link your project (**only on react-native versions prior 0.60**): 
-```
-// Add the classes of the plugin to your android and iOS projects 
-$ npx react-native link @bugfender/rn-bugfender`
-```
-
 Make sure you're targeting at least iOS platform version 10 (specify `platform :ios, '10.0'`).
 
-A new line should have been added automatically to your Podfile: 
-
-`pod 'RNBugfender', :path => '../node_modules/@bugfender/rn-bugfender'`
-
-3. After configuring the podfile you can now go to the console and run 
+2. After configuring the podfile you can now go to the console and run 
 
 `$ pod install`
 
 When the installation has finished you should be able to run your project in iOS and Android. 
 
 **Remember that you should be using the Xcode workspace instead of the xcodeproj file from now on.**
-
-**Important**: the *podspec* of RNBugfender declares React as a dependency. Your Podfile must explicitly override that React dependency. Like this: 
-
-`pod 'React', path: '../node_modules/react-native'`
-
-If you created your project with the react-native cli from React Native 0.60 or newer your podfile should be already prepared. For older versions of react-native you must ensure to override it. Otherwise, CocoaPods will download and install a new version in your iOS folder and you will end up with all the React libraries duplicated.  
 
 *At the end of this document you can find a **[recommended podfile](#recommended-podfile)**. You can use it as an example*. 
 
