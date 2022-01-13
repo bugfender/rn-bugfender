@@ -1,10 +1,10 @@
-#import "RNBugfender.h"
+#import "RnBugfender.h"
 #import <BugfenderSDK/BugfenderSDK.h>
 #import <React/RCTUtils.h>
 
-@implementation RNBugfender
+@implementation RnBugfender
 
-RCT_EXPORT_MODULE(RNBugfender);
+RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(activateLogger:(NSString *)key)
 {
@@ -114,7 +114,7 @@ RCT_EXPORT_METHOD(log:(int)lineNumber method:(NSString *)method file:(NSString *
         logLevel = BFLogLevelError;
     else if ([rawLogLevel isEqualToString:@"Warning"])
         logLevel = BFLogLevelWarning;
-    
+
     [Bugfender logWithLineNumber:lineNumber method:method file:file level:logLevel tag:tag message:message];
 }
 
@@ -153,7 +153,7 @@ RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subje
             reject(0, @"Feedback not sent", nil);
         }
     }];
-    
+
     UIViewController* vc = RCTPresentedViewController();
     [vc presentViewController:controller animated:YES completion:nil];
 

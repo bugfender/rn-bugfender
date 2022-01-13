@@ -1,7 +1,5 @@
 #import <React/RCTBridgeModule.h>
 
-@import UIKit;
-
-@interface RNBugfender : NSObject <RCTBridgeModule>
+@interface RnBugfender : NSObject <RCTBridgeModule>
 
 @end

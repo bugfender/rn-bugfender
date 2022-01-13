@@ -1,5 +1,7 @@
 package com.bugfender.react;
 
+import androidx.annotation.NonNull;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
@@ -11,22 +13,26 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.module.annotations.ReactModule;
 
 import java.net.URL;
 
-public class RNBugfenderModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+@ReactModule(name = RnBugfenderModule.NAME)
+public class RnBugfenderModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+  public static final String NAME = "RnBugfender";
 
-  private Promise pendingPromise; // Promise that is waiting information that will be available in onActivityResult
-
-  public RNBugfenderModule(ReactApplicationContext rc) {
-    super(rc);
+  public RnBugfenderModule(ReactApplicationContext reactContext) {
+    super(reactContext);
     this.getReactApplicationContext().addActivityEventListener(this);
   }
 
   @Override
+  @NonNull
   public String getName() {
-    return "RNBugfender";
+    return NAME;
   }
+
+  private Promise pendingPromise; // Promise that is waiting information that will be available in onActivityResult
 
   @ReactMethod
   public void overrideDeviceName(String deviceName) {
@@ -99,6 +105,21 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule implements Act
   }
 
   @ReactMethod
+  public void info(String tag, String text) {
+    Bugfender.i(tag, text);
+  }
+
+  @ReactMethod
+  public void trace(String tag, String text) {
+    Bugfender.t(tag, text);
+  }
+
+  @ReactMethod
+  public void fatal(String tag, String text) {
+    Bugfender.f(tag, text);
+  }
+
+  @ReactMethod
   public void debug(String tag, String text) {
     Bugfender.d(tag, text);
   }
@@ -158,9 +179,9 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule implements Act
 
   @ReactMethod
   public void showUserFeedback(String title, String hint, String subjectHint, String messageHint, String sendButtonText, String cancelButtonText,
-      Promise promise) {
+                               Promise promise) {
     getCurrentActivity().startActivityForResult(
-        Bugfender.getUserFeedbackActivityIntent(getApplication(), title, hint, subjectHint, messageHint, sendButtonText), SHOW_USER_FEEDBACK_REQUEST_CODE
+      Bugfender.getUserFeedbackActivityIntent(getApplication(), title, hint, subjectHint, messageHint, sendButtonText), SHOW_USER_FEEDBACK_REQUEST_CODE
     );
     pendingPromise = promise;
   }
@@ -171,6 +192,12 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule implements Act
 
   private static LogLevel parseLogLevel(String loglevel) {
     switch (loglevel) {
+      case "Trace":
+        return LogLevel.Trace;
+      case "Info":
+        return LogLevel.Info;
+      case "Fatal":
+        return LogLevel.Fatal;
       case "Debug":
         return LogLevel.Debug;
       case "Warning":
@@ -182,7 +209,8 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule implements Act
     }
   }
 
-  @Override public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+  @Override
+  public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
     if (requestCode == SHOW_USER_FEEDBACK_REQUEST_CODE && pendingPromise != null) {
       if (resultCode == Activity.RESULT_OK) {
         pendingPromise.resolve(data.getStringExtra(FeedbackActivity.RESULT_FEEDBACK_URL));
@@ -193,7 +221,8 @@ public class RNBugfenderModule extends ReactContextBaseJavaModule implements Act
     }
   }
 
-  @Override public void onNewIntent(Intent intent) {
+  @Override
+  public void onNewIntent(Intent intent) {
     // Nothing to do
   }
 }

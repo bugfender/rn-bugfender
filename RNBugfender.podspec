@@ -1,27 +1,21 @@
-# @bugfender/rn-bugfender.podspec
-
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::Spec.new do |s|
-  s.name         = "RNBugfender"
-  s.version      = package['version']
-  s.summary      = package['description']
-  s.description  = package['description']
-  s.license      = package['license']
-  s.author       = package['author']
-  s.homepage     = package['homepage']
+  s.name         = "RnBugfender"
+  s.version      = package["version"]
+  s.summary      = package["description"]
+  s.homepage     = package["homepage"]
+  s.license      = package["license"]
+  s.authors      = package["author"]
 
   s.platforms    = { :ios => "10.0" }
-  s.requires_arc = true
-  s.static_framework = true
+  s.source       = { :git => "https://TODO.com.git", :tag => "#{s.version}" }
 
-  s.source       = { :git => "https://github.com/bugfender/BugfenderSDK-iOS", :tag => "master" }
-  s.source_files  = 'ios/*.{h,m}'
+  s.source_files = "ios/**/*.{h,m,mm}"
 
-  s.dependency "React"
-  s.dependency 'BugfenderSDK', '~> 1.10.3'
+  s.dependency "React-Core"
+  s.dependency 'BugfenderSDK', '~> 1.10.5'
 
 end
-
