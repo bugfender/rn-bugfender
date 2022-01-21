@@ -5,6 +5,7 @@ import {DefaultUserFeedbackOptions} from './user-feedback';
 import type {DeviceKeyValue} from './types/device';
 import type {ILogEntry} from './types/log';
 import {StringFormatter} from './string-formatter';
+import {LogLevel} from "./types/log";
 
 const LINKING_ERROR =
   `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
@@ -234,12 +235,12 @@ class BugfenderClass {
    */
   public sendLog(log: ILogEntry): void {
     RnBugfender.log(
-      log.line,
-      log.method,
-      log.file,
-      log.level,
-      log.tag,
-      log.text
+      log.line || 0,
+      log.method || '',
+      log.file || '',
+      log.level || LogLevel.Debug,
+      log.tag || '',
+      log.text || ''
     );
   }
 

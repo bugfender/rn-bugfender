@@ -135,7 +135,7 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
   }
 
   @ReactMethod
-  public void log(int lineNumber, String method, String file, String rawLogLevel, String tag, String message) {
+  public void log(int lineNumber, String method, String file, int rawLogLevel, String tag, String message) {
     final LogLevel logLevel = parseLogLevel(rawLogLevel);
     Bugfender.log(lineNumber, method, file, logLevel, tag, message);
   }
@@ -190,19 +190,19 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
     return (Application) getReactApplicationContext().getApplicationContext();
   }
 
-  private static LogLevel parseLogLevel(String loglevel) {
+  private static LogLevel parseLogLevel(int loglevel) {
     switch (loglevel) {
-      case "Trace":
+      case 3:
         return LogLevel.Trace;
-      case "Info":
+      case 4:
         return LogLevel.Info;
-      case "Fatal":
+      case 5:
         return LogLevel.Fatal;
-      case "Debug":
+      case 0:
         return LogLevel.Debug;
-      case "Warning":
+      case 1:
         return LogLevel.Warning;
-      case "Error":
+      case 2:
         return LogLevel.Error;
       default:
         return null;

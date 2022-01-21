@@ -92,6 +92,21 @@ RCT_EXPORT_METHOD(setDeviceFloat:(NSString *)deviceKey floatValue:(float)floatVa
     [Bugfender setDeviceDouble:floatValue forKey:deviceKey];
 }
 
+RCT_EXPORT_METHOD(info:(NSString *)tag text:(NSString *)text)
+{
+    BFLog2(BFLogLevelInfo, tag, @"%@", text);
+}
+
+RCT_EXPORT_METHOD(trace:(NSString *)tag text:(NSString *)text)
+{
+    BFLog2(BFLogLevelTrace, tag, @"%@", text);
+}
+
+RCT_EXPORT_METHOD(fatal:(NSString *)tag text:(NSString *)text)
+{
+    BFLog2(BFLogLevelFatal, tag, @"%@", text);
+}
+
 RCT_EXPORT_METHOD(debug:(NSString *)tag text:(NSString *)text)
 {
     BFLog2(BFLogLevelDefault, tag, @"%@", text);
@@ -107,13 +122,19 @@ RCT_EXPORT_METHOD(error:(NSString *)tag text:(NSString *)text)
     BFLog2(BFLogLevelError, tag, @"%@", text);
 }
 
-RCT_EXPORT_METHOD(log:(int)lineNumber method:(NSString *)method file:(NSString *)file logLevel:(NSString *)rawLogLevel tag:(NSString *)tag  message:(NSString *)message)
+RCT_EXPORT_METHOD(log:(int)lineNumber method:(NSString *)method file:(NSString *)file logLevel:(int)rawLogLevel tag:(NSString *)tag  message:(NSString *)message)
 {
     BFLogLevel logLevel = BFLogLevelDefault;
-    if ([rawLogLevel isEqualToString:@"Error"])
-        logLevel = BFLogLevelError;
-    else if ([rawLogLevel isEqualToString:@"Warning"])
+    if (rawLogLevel == 1)
         logLevel = BFLogLevelWarning;
+    else if (rawLogLevel == 2)
+        logLevel = BFLogLevelError;
+    else if (rawLogLevel == 3)
+        logLevel = BFLogLevelTrace;
+    else if (rawLogLevel == 4)
+        logLevel = BFLogLevelInfo;
+    else if (rawLogLevel == 5)
+        logLevel = BFLogLevelFatal;
 
     [Bugfender logWithLineNumber:lineNumber method:method file:file level:logLevel tag:tag message:message];
 }
