@@ -5,6 +5,8 @@ export interface ISDKOptions {
   apiURL?: string;
   /** Base URL to Bugfender web dashboard */
   baseURL?: string;
+  /** Override default `window.console` so it also logs to Bugfender. Defaults to `true`. */
+  overrideConsoleMethods?: boolean;
   /** Logs all logs written via Logcat (Android specific, won't have any effect on iOS). Defaults to `false`. */
   enableLogcatLogging?: boolean;
   /** Boolean that represent if Bugfender sdk should print the logs in console (Android specific, won't have any effect on iOS) */

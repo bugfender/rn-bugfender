@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import {Button, Linking, StyleSheet, Text, View} from 'react-native';
-import {Bugfender} from '@bugfender/rn-bugfender';
-import {LogLevel} from "../../src/types/log";
+import {Bugfender, LogLevel} from '@bugfender/rn-bugfender';
 
 export default function App() {
 
@@ -13,6 +12,8 @@ export default function App() {
   React.useEffect(() => {
     Bugfender.init({
       appKey: key,
+      overrideConsoleMethods: true,
+      printToConsole: true,
     });
   }, []);
 
@@ -93,13 +94,21 @@ export default function App() {
     Bugfender.trace('Trace log');
     Bugfender.info('Info log');
 
+    console.log('Log from console');
+
+    console.warn('Warn log from console');
+    console.error('Error log from console');
+    console.debug('Debug log from console');
+    console.trace('Trace log from console');
+    console.info('Info log from console');
+
     Bugfender.sendLog({
       line: 1001,
       level: LogLevel.Debug,
       tag: 'tag',
       method: 'method',
       file: 'file',
-      text: 'Sending low level log.',
+      text: 'Sending low level debug log.',
     });
 
     Bugfender.sendLog({
@@ -108,7 +117,7 @@ export default function App() {
       tag: 'tag',
       method: 'method',
       file: 'file',
-      text: 'Sending low level log.',
+      text: 'Sending low level error log.',
     });
 
     Bugfender.sendLog({
@@ -117,7 +126,7 @@ export default function App() {
       tag: 'tag',
       method: 'method',
       file: 'file',
-      text: 'Sending low level log.',
+      text: 'Sending low level warn log.',
     });
 
     Bugfender.sendLog({
@@ -126,7 +135,7 @@ export default function App() {
       tag: 'tag',
       method: 'method',
       file: 'file',
-      text: 'Sending low level log.',
+      text: 'Sending low level info log.',
     });
 
     Bugfender.sendLog({
@@ -144,7 +153,7 @@ export default function App() {
       tag: 'tag',
       method: 'method',
       file: 'file',
-      text: 'Sending low level log.',
+      text: 'Sending low level trace log.',
     });
 
     Bugfender.setDeviceKey('device.key.string', 'fake.string.value');
