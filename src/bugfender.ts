@@ -30,39 +30,43 @@ class BugfenderClass {
   stringFormatter = new StringFormatter();
   overrideConsoleMethods = new OverrideConsoleMethods(window);
   printToConsole = new PrintToConsole(global.console);
+  initialized = false;
 
   public init(options: ISDKOptions) {
+    if (!this.initialized) {
+      // Library initialization
+      Platform.OS === 'ios'
+        ? RnBugfender.activateLogger(options.appKey)
+        : RnBugfender.init(options.appKey, false);
 
-    // Library initialization
-    Platform.OS === 'ios'
-      ? RnBugfender.activateLogger(options.appKey)
-      : RnBugfender.init(options.appKey, false);
+      if (typeof options.apiURL !== 'undefined') {
+        RnBugfender.setApiUrl(options.apiURL);
+      }
 
-    if (typeof options.apiURL !== 'undefined') {
-      RnBugfender.setApiUrl(options.apiURL);
+      if (typeof options.baseURL !== 'undefined') {
+        RnBugfender.setBaseUrl(options.baseURL);
+      }
+
+      if (options.enableLogcatLogging) {
+        RnBugfender.enableLogcatLogging();
+      }
+
+      if (options.logUIEvents) {
+        RnBugfender.enableUIEventLogging();
+      }
+
+      if (options.registerErrorHandler) {
+        RnBugfender.enableCrashReporting();
+      }
+
+      if (options.overrideConsoleMethods) {
+        this.overrideConsoleMethods.init(this.stringFormatter, this.printToConsole);
+      }
+
+      this.printToConsole.init(options.printToConsole ?? false);
+
+      this.initialized = true;
     }
-
-    if (typeof options.baseURL !== 'undefined') {
-      RnBugfender.setBaseUrl(options.baseURL);
-    }
-
-    if (options.enableLogcatLogging) {
-      RnBugfender.enableLogcatLogging();
-    }
-
-    if (options.logUIEvents) {
-      RnBugfender.enableUIEventLogging();
-    }
-
-    if (options.registerErrorHandler) {
-      RnBugfender.enableCrashReporting();
-    }
-
-    if (options.overrideConsoleMethods) {
-      this.overrideConsoleMethods.init(this.stringFormatter, this.printToConsole);
-    }
-
-    this.printToConsole.init(options.printToConsole ?? false);
   }
 
   /**
