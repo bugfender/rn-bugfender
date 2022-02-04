@@ -87,7 +87,6 @@ export default function App() {
 
     Bugfender.log('Log without break lines in the middle of the message');
     Bugfender.log('Log with break lines \n\n in the middle of the message');
-
     Bugfender.warn('Warn log');
     Bugfender.error('Error log');
     Bugfender.fatal('Fatal log');
@@ -95,7 +94,6 @@ export default function App() {
     Bugfender.info('Info log');
 
     console.log('Log from console');
-
     console.warn('Warn log from console');
     console.error('Error log from console');
     console.debug('Debug log from console');
@@ -131,20 +129,20 @@ export default function App() {
 
     Bugfender.sendLog({
       line: 1001,
+      level: LogLevel.Fatal,
+      tag: 'tag',
+      method: 'method',
+      file: 'file',
+      text: 'Sending low level fatal log.',
+    });
+
+    Bugfender.sendLog({
+      line: 1001,
       level: LogLevel.Info,
       tag: 'tag',
       method: 'method',
       file: 'file',
       text: 'Sending low level info log.',
-    });
-
-    Bugfender.sendLog({
-      line: 1001,
-      level: LogLevel.Fatal,
-      tag: 'tag',
-      method: 'method',
-      file: 'file',
-      text: 'Sending low level log.',
     });
 
     Bugfender.sendLog({
@@ -162,22 +160,22 @@ export default function App() {
     Bugfender.setDeviceKey('device.key.integer', 102);
 
     Bugfender.sendIssue('Issue One', 'Issue Message One').then((url) =>
-      console.log(url)
+      console.log('Issue url: %s', url)
     );
     Bugfender.sendIssue('Issue Two', 'Issue Message Two').then((url) =>
-      console.log(url)
+      console.log('Issue url: %s', url)
     );
     Bugfender.sendIssue('Issue Three', 'Issue Message Three').then((url) =>
-      console.log(url)
+      console.log('Issue url: %s', url)
     );
     Bugfender.sendCrash('Crash title', 'Crash text').then((url) =>
-      console.log(url)
+      console.log('Crash url: %s', url)
     );
     Bugfender.sendUserFeedback('User feedback', 'User feedback message').then((url) =>
-      console.log(url)
+      console.log('Feedback url: %s', url)
     );
-    Bugfender.getDeviceURL().then((url) => console.log(url));
-    Bugfender.getSessionURL().then((url) => console.log(url));
+    Bugfender.getDeviceURL().then((url) => console.log('Device url: %s', url));
+    Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
   }
 
   function _onPressShowUserFeedback(): void {
@@ -189,10 +187,12 @@ export default function App() {
         submitLabel: 'Send',
         closeLabel: 'Cancel',
       }
-    ).then(url => {
-      console.log('RN: feedback sent with url:', url);
-    }).catch(error => {
-      console.log('RN: feedback not sent');
+    ).then(response => {
+      if (response.isSent) {
+        console.log('RN: feedback sent with url:', response.feedbackURL);
+      } else {
+        console.log('RN: feedback not sent');
+      }
     });
   }
 
