@@ -27,10 +27,10 @@ const RnBugfender = NativeModules.RnBugfender
   );
 
 class BugfenderClass {
-  stringFormatter = new StringFormatter();
-  overrideConsoleMethods = new OverrideConsoleMethods(window);
-  printToConsole = new PrintToConsole(global.console);
-  initialized = false;
+  private stringFormatter = new StringFormatter();
+  private overrideConsoleMethods = new OverrideConsoleMethods(window);
+  private printToConsole = new PrintToConsole(global.console);
+  private initialized = false;
 
   public init(options: ISDKOptions) {
     if (!this.initialized) {
@@ -340,6 +340,7 @@ class BugfenderClass {
    * in the Bugfender Console.
    */
   public forceSendOnce(): void {
+    this.printToConsole.info(`Force send once`);
     RnBugfender.forceSendOnce();
   }
 }
