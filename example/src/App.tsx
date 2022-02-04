@@ -176,6 +176,8 @@ export default function App() {
     );
     Bugfender.getDeviceURL().then((url) => console.log('Device url: %s', url));
     Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
+
+    Bugfender.forceSendOnce();
   }
 
   function _onPressShowUserFeedback(): void {
