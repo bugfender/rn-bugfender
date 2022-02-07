@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {RnBugfender} from "./bugfender";
-import {StringFormatter} from "./string-formatter";
+import type {StringFormatter} from "./string-formatter";
 
 /**
  * Overrides the `window.console` methods in order to execute the Bugfender equivalent logging
@@ -13,8 +13,6 @@ export class OverrideConsoleMethods {
   }
 
   public init(stringFormatter: StringFormatter): void {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
 
     (this.window as any).console = function (console: Console) {
       return {

@@ -2,9 +2,8 @@ import {format} from 'util';
 import type {ILogEntry} from "./types/log";
 import {LogLevel} from "./types/log";
 
-
 export class PrintToConsole {
-  protected printToConsole: boolean;
+  protected printToConsole: boolean = false;
 
   constructor(
     protected readonly console: Console,
@@ -61,6 +60,7 @@ export class PrintToConsole {
       const location = [log.file || '', log.method || '', log.line || ''].filter(p => p !== '').join(':');
       const message = `${tag}${format(log.text)} ${location}`;
 
+      // @ts-ignore
       this.console[method](message);
     }
   }

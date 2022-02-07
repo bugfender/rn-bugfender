@@ -60,7 +60,7 @@ class BugfenderClass {
       }
 
       if (options.overrideConsoleMethods) {
-        this.overrideConsoleMethods.init(this.stringFormatter, this.printToConsole);
+        this.overrideConsoleMethods.init(this.stringFormatter);
       }
 
       this.printToConsole.init(options.printToConsole ?? false);
@@ -104,7 +104,7 @@ class BugfenderClass {
   public async getUserFeedback(
     options?: UserFeedbackOptions
   ): Promise<UserFeedbackResult> {
-    return new Promise<UserFeedbackResult>(function (resolve, reject) {
+    return new Promise<UserFeedbackResult>(function (resolve) {
       let defaultOptions = new DefaultUserFeedbackOptions();
       if (typeof options === 'undefined') {
         options = defaultOptions;
@@ -123,7 +123,7 @@ class BugfenderClass {
             feedbackURL: value,
           });
         },
-        (reason: any) => {
+        (_: any) => {
           resolve({
             isSent: false,
           });
