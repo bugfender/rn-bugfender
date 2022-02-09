@@ -12,8 +12,6 @@ export default function App() {
   React.useEffect(() => {
     Bugfender.init({
       appKey: key,
-      overrideConsoleMethods: true,
-      printToConsole: true,
     });
   }, []);
 

@@ -8,6 +8,7 @@ import {StringFormatter} from './string-formatter';
 import {LogLevel} from "./types/log";
 import {OverrideConsoleMethods} from "./override-console-methods";
 import {PrintToConsole} from "./print-to-console";
+import {SDKOptions} from "./sdk-options";
 
 const LINKING_ERROR =
   `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
@@ -30,40 +31,43 @@ class BugfenderClass {
   private stringFormatter = new StringFormatter();
   private overrideConsoleMethods = new OverrideConsoleMethods(window);
   private printToConsole = new PrintToConsole(global.console);
+  private sdkOptions: SDKOptions = new SDKOptions();
   private initialized = false;
 
   public init(options: ISDKOptions) {
     if (!this.initialized) {
+      const validatedOptions = this.sdkOptions.init(options);
+
       // Library initialization
       Platform.OS === 'ios'
-        ? RnBugfender.activateLogger(options.appKey)
-        : RnBugfender.init(options.appKey, false);
+        ? RnBugfender.activateLogger(validatedOptions.appKey)
+        : RnBugfender.init(validatedOptions.appKey, false);
 
-      if (typeof options.apiURL !== 'undefined') {
-        RnBugfender.setApiUrl(options.apiURL);
+      if (typeof validatedOptions.apiURL !== 'undefined') {
+        RnBugfender.setApiUrl(validatedOptions.apiURL);
       }
 
-      if (typeof options.baseURL !== 'undefined') {
-        RnBugfender.setBaseUrl(options.baseURL);
+      if (typeof validatedOptions.baseURL !== 'undefined') {
+        RnBugfender.setBaseUrl(validatedOptions.baseURL);
       }
 
-      if (options.enableLogcatLogging) {
+      if (validatedOptions.enableLogcatLogging) {
         RnBugfender.enableLogcatLogging();
       }
 
-      if (options.logUIEvents) {
+      if (validatedOptions.logUIEvents) {
         RnBugfender.enableUIEventLogging();
       }
 
-      if (options.registerErrorHandler) {
+      if (validatedOptions.registerErrorHandler) {
         RnBugfender.enableCrashReporting();
       }
 
-      if (options.overrideConsoleMethods) {
+      if (validatedOptions.overrideConsoleMethods) {
         this.overrideConsoleMethods.init(this.stringFormatter);
       }
 
-      this.printToConsole.init(options.printToConsole ?? false);
+      this.printToConsole.init(validatedOptions.printToConsole ?? true);
 
       this.initialized = true;
     }
