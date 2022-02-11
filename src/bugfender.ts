@@ -74,6 +74,16 @@ class BugfenderClass {
   }
 
   /**
+   * Sets the name for the device. If the Device Name is not set, then the platform standard device name will be automatically sent
+   *
+   * @note This method has to be called prior to activate logger. Otherwise, an exception will be thrown
+   * @param {string} deviceName - Device name that will be sent to Bugfender.
+   */
+  public overrideDeviceName(deviceName: string) {
+    RnBugfender.overrideDeviceName(deviceName);
+  }
+
+  /**
    * @returns Bugfender dashboard URL for the device
    */
   public getDeviceURL(): Promise<string> {

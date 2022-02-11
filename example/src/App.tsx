@@ -10,6 +10,9 @@ export default function App() {
   const key = require('./bugfenderKey.json').bugfenderKey;
 
   React.useEffect(() => {
+    // Optional method. Use it to override the device name and avoid sending personal data like "iPhone of John Doe"
+    Bugfender.overrideDeviceName('Anonymous Phone');
+
     Bugfender.init({
       appKey: key,
     });

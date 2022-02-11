@@ -64,7 +64,10 @@ Download the latest release from [Github](https://github.com/bugfender/Bugfender
 
 ## RNBugfender Usage
 ```typescript
-import Bugfender from '@bugfender/rn-bugfender';
+import { Bugfender,LogLevel } from '@bugfender/rn-bugfender';
+
+// Optional method. Use it prior init to override the device name and avoid sending personal data
+Bugfender.overrideDeviceName('Anonymous Phone');
 
 // Init Bugfender with your APP key
 Bugfender.init({
@@ -78,7 +81,7 @@ Bugfender.init({
   // enableLogcatLogging: false,
 });
 
-// Sending logs with different levels
+// Send logs with different levels
 Bugfender.log ('This is a debug log in Bugfender from React Native');
 Bugfender.warn ('This is a warn log in Bugfender from React Native');
 Bugfender.error ('This is a error log in Bugfender from React Native');
@@ -86,7 +89,7 @@ Bugfender.fatal('This is a fatal log in Bugfender from React Native');
 Bugfender.trace('This is a trace log in Bugfender from React Native');
 Bugfender.info('This is a info log in Bugfender from React Native');
 
-// Low level logs
+// Send low level log
 Bugfender.sendLog({
   line: 1001,
   level: LogLevel.Debug,
@@ -134,7 +137,7 @@ Bugfender.setDeviceKey('device.key.boolean', true);
 Bugfender.setDeviceKey('device.key.float', 10.1);
 Bugfender.setDeviceKey('device.key.integer', 102);
 
-// Get different urls
+// Get different URLs
 Bugfender.getDeviceURL().then((url) => console.log('Device url: %s', url));
 Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
 

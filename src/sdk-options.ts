@@ -32,6 +32,7 @@ export class SDKOptions {
     const urlValidator = new RegExp(/^http(s)?:\/\//i);
 
     Object.entries(this.rules).forEach(([key, rules]) => {
+      // @ts-ignore
       const value = options[key];
 
       rules.forEach(rule => {
