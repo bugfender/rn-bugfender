@@ -71,7 +71,7 @@ Bugfender.overrideDeviceName('Anonymous Phone');
 
 // Init Bugfender with your APP key
 Bugfender.init({
-  appKey: "<YOUR APP KEY>",
+  appKey: '<YOUR APP KEY>',
   // apiURL: 'https://api.bugfender.com',
   // baseURL: 'https://dashboard.bugfender.com',
   // overrideConsoleMethods: true,
