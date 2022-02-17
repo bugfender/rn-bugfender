@@ -1,10 +1,10 @@
 import {format} from "util";
 
 export class StringFormatter {
-  public format(parameters: any[]): string {
+  public format(parameters: unknown[]): string {
     const [, ...textParams] = parameters;
-    let [textFormat] = parameters;
-    let text;
+    let [textFormat] = parameters as string[];
+    let text: string;
 
     try {
       // Our sanitizer gives better results, try with it first
