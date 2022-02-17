@@ -17,21 +17,12 @@ export interface UserFeedbackOptions {
 }
 
 export class DefaultUserFeedbackOptions implements Required<UserFeedbackOptions> {
-  constructor() {
-    this.title = 'Feedback';
-    this.hint = 'Please insert your feedback here and click send';
-    this.subjectPlaceholder = 'Subject…';
-    this.feedbackPlaceholder = 'Your feedback…';
-    this.submitLabel = 'Send';
-    this.closeLabel = 'Close';
-  }
-
-  feedbackPlaceholder: string;
-  hint: string;
-  subjectPlaceholder: string;
-  submitLabel: string;
-  title: string;
-  closeLabel: string;
+  public title = 'Feedback';
+  public hint = 'Please insert your feedback here and click send';
+  public subjectPlaceholder = 'Subject…';
+  public feedbackPlaceholder = 'Your feedback…';
+  public submitLabel = 'Send';
+  public closeLabel = 'Close';
 }
 
 export interface UserFeedbackResult {
