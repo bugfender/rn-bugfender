@@ -64,7 +64,7 @@ Download the latest release from [Github](https://github.com/bugfender/Bugfender
 
 ## RNBugfender Usage
 ```typescript
-import { Bugfender,LogLevel } from '@bugfender/rn-bugfender';
+import { Bugfender, LogLevel } from '@bugfender/rn-bugfender';
 
 // Optional method. Use it prior init to override the device name and avoid sending personal data
 Bugfender.overrideDeviceName('Anonymous Phone');
