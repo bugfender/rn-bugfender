@@ -118,18 +118,19 @@ class BugfenderClass {
   public async getUserFeedback(
     options?: UserFeedbackOptions
   ): Promise<UserFeedbackResult> {
-    return new Promise<UserFeedbackResult>(function (resolve) {
-      let defaultOptions = new DefaultUserFeedbackOptions();
-      if (typeof options === 'undefined') {
-        options = defaultOptions;
-      }
+    return new Promise<UserFeedbackResult>((resolve) => {
+      options = {
+         ...new DefaultUserFeedbackOptions(),
+         ...(options ?? {}),
+      };
+
       return RnBugfender.showUserFeedback(
-        options.title ?? defaultOptions.title,
-        options.hint ?? defaultOptions.hint,
-        options.subjectPlaceholder ?? defaultOptions.subjectPlaceholder,
-        options.feedbackPlaceholder ?? defaultOptions.feedbackPlaceholder,
-        options.submitLabel ?? defaultOptions.submitLabel,
-        options.closeLabel ?? defaultOptions.closeLabel
+        options.title,
+        options.hint,
+        options.subjectPlaceholder,
+        options.feedbackPlaceholder,
+        options.submitLabel,
+        options.closeLabel
       ).then(
         (value: string) => {
           resolve({
