@@ -28,15 +28,24 @@ export const LOG_LEVELS: LogLevel[] = [
  * @hidden
  */
 export interface ILogEntryShort {
-  x: string; // Date ISO
-  t: string; // Text
-  m: string; // Method
-  at: number; // Absolute Time
-  tg: string; // Tag
-  f: string; // File
-  l: number; // Line
-  ll: number; // Level
-  u: string; // URL
+  /** Date ISO */
+  x: string;
+  /** Text */
+  t: string;
+  /** Method */
+  m: string;
+  /** Absolute Time */
+  at: number;
+  /** Tag */
+  tg: string;
+  /** File */
+  f: string;
+  /** Line */
+  l: number;
+  /** Level */
+  ll: number;
+  /** URL */
+  u: string;
 }
 
 /**
