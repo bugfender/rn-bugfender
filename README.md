@@ -66,9 +66,6 @@ Download the latest release from [Github](https://github.com/bugfender/Bugfender
 ```typescript
 import { Bugfender, LogLevel } from '@bugfender/rn-bugfender';
 
-// Optional method. Use it prior init to override the device name and avoid sending personal data
-Bugfender.overrideDeviceName('Anonymous Phone');
-
 // Init Bugfender with your APP key
 Bugfender.init({
   appKey: '<YOUR APP KEY>',
@@ -78,6 +75,7 @@ Bugfender.init({
   // printToConsole: true,
   // logUIEvents: true,
   // registerErrorHandler: true,
+  // deviceName: 'Anonymous Phone',
   // enableLogcatLogging: false,
 });
 

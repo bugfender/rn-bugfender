@@ -13,6 +13,8 @@ export interface ISDKOptions {
   logUIEvents?: boolean;
   /** Register error handler for uncaught errors that reports a crash to Bugfender. Defaults to `true`. */
   registerErrorHandler?: boolean;
+  /** Sets the name for the device. If the Device Name is not set, then the platform standard device name will be automatically sent */
+  deviceName?: string;
   /** Logs all logs written via Logcat (Android specific, won't have any effect on iOS). Defaults to `false`. */
   enableLogcatLogging?: boolean;
 }
