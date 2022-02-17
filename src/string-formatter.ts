@@ -23,7 +23,7 @@ export class StringFormatter {
     return text;
   }
 
-  private toString(value: any): string {
+  private toString(value: unknown): string {
     // Depending on the type we prefer to do `String` or `stringify`
     const isToString = ['string', 'symbol', 'bigint', 'function'].includes(typeof value) || value instanceof Error;
 
