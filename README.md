@@ -82,9 +82,9 @@ Bugfender.init({
 });
 
 // Send logs with different levels
-Bugfender.log ('This is a debug log in Bugfender from React Native');
-Bugfender.warn ('This is a warn log in Bugfender from React Native');
-Bugfender.error ('This is a error log in Bugfender from React Native');
+Bugfender.log('This is a debug log in Bugfender from React Native');
+Bugfender.warn('This is a warn log in Bugfender from React Native');
+Bugfender.error('This is a error log in Bugfender from React Native');
 Bugfender.fatal('This is a fatal log in Bugfender from React Native');
 Bugfender.trace('This is a trace log in Bugfender from React Native');
 Bugfender.info('This is a info log in Bugfender from React Native');
