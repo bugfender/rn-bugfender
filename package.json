@@ -153,6 +153,7 @@
     ]
   },
   "dependencies": {
+    "@bugfender/sdk": "^2.0.0-alpha.0",
     "util": "^0.12.4"
   }
 }

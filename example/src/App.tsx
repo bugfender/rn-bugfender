@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import {Button, Linking, StyleSheet, Text, View} from 'react-native';
-import {Bugfender, LogLevel} from '@bugfender/rn-bugfender';
+import { Button, Linking, StyleSheet, Text, View } from 'react-native';
+import { Bugfender, LogLevel, SDKOptionsBuilder } from '@bugfender/rn-bugfender';
 
 export default function App() {
 
@@ -10,10 +10,22 @@ export default function App() {
   const key = require('./bugfenderKey.json').bugfenderKey;
 
   React.useEffect(() => {
-    Bugfender.init({
-      appKey: key,
-    });
-  }, []);
+    Bugfender.init(
+      new SDKOptionsBuilder({
+        appKey: key,
+        deviceName: 'anonymous device',
+      })
+        .web({
+          version: '1.0',
+          build: '0001',
+          logBrowserEvents: true,
+        })
+        .native({
+          enableLogcatLogging: true,
+        })
+        .build()
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -180,14 +192,13 @@ export default function App() {
 
   function _onPressShowUserFeedback(): void {
     Bugfender.getUserFeedback({
-        title: 'Feedback',
-        hint: 'Please send us your feedback',
-        subjectPlaceholder: 'This is the reason',
-        feedbackPlaceholder: 'This is the full message',
-        submitLabel: 'Send',
-        closeLabel: 'Cancel',
-      }
-    ).then(response => {
+      title: 'Feedback',
+      hint: 'Please send us your feedback',
+      subjectPlaceholder: 'This is the reason',
+      feedbackPlaceholder: 'This is the full message',
+      submitLabel: 'Send',
+      closeLabel: 'Cancel',
+    }).then((response) => {
       if (response.isSent) {
         console.log('RN: feedback sent with url:', response.feedbackURL);
       } else {

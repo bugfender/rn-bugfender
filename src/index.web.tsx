@@ -1,7 +1,5 @@
 import { LogLevel } from './types/log';
 import { SDKOptionsBuilder } from './types/sdk-options';
-import { BugfenderClass } from './bugfender';
-
-const Bugfender = new BugfenderClass();
+import { Bugfender } from '@bugfender/sdk';
 
 export { Bugfender, LogLevel, SDKOptionsBuilder };
