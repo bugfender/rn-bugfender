@@ -53,7 +53,7 @@ export class SDKOptionsBuilder {
   }
 
   public build(): ISDKOptions {
-    return {
+    const options: ISDKOptions = {
       appKey: this.commonOptions.appKey,
       apiURL: this.commonOptions.apiURL,
       baseURL: this.commonOptions.baseURL,
@@ -67,5 +67,15 @@ export class SDKOptionsBuilder {
       version: this.webOptions?.version,
       enableLogcatLogging: this.nativeOptions?.enableLogcatLogging,
     };
+
+    // Removing undefined attributes
+    Object.entries(options).forEach(([key, value]) => {
+      if (value === undefined) {
+        // @ts-ignore
+        delete options[key];
+      }
+    });
+
+    return options;
   }
 }

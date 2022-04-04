@@ -17,6 +17,15 @@ export class SDKOptions {
     // Validate user provided options
     this.validate(options);
 
+    // Removing undefined attributes
+    options = { ...options };
+    Object.entries(options).forEach(([key, value]) => {
+      if (value === undefined) {
+        // @ts-ignore
+        delete options[key];
+      }
+    });
+
     // Set default values if needed
     return {
       overrideConsoleMethods: true,
