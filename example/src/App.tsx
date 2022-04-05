@@ -13,15 +13,21 @@ export default function App() {
     Bugfender.init(
       new SDKOptionsBuilder({
         appKey: key,
-        deviceName: 'anonymous device',
+        // apiURL: 'https://api.bugfender.com',
+        // baseURL: 'https://dashboard.bugfender.com',
+        // overrideConsoleMethods: true,
+        // printToConsole: true,
+        // logUIEvents: true,
+        // registerErrorHandler: true,
+        deviceName: 'Anonymous',
       })
         .web({
           version: '1.0',
-          build: '0001',
+          build: '01',
           logBrowserEvents: true,
         })
         .native({
-          enableLogcatLogging: true,
+          enableLogcatLogging: false,
         })
         .build()
     );
