@@ -18,16 +18,16 @@ export interface ISDKCommonOptions {
 }
 
 export interface ISDKWebOptions {
-  /** Register a handler for most common browser events to report them to Bugfender. Defaults to `true`. */
+  /** Register a handler for most common browser events to report them to Bugfender (Web specific). Defaults to `true`. */
   logBrowserEvents?: boolean;
-  /** App build identifier */
+  /** App build identifier (Web specific) */
   build?: string;
-  /** App version identifier */
+  /** App version identifier (Web specific) */
   version?: string;
 }
 
 export interface ISDKNativeOptions {
-  /** Logs all logs written via Logcat (Android specific, won't have any effect on iOS). Defaults to `false`. */
+  /** Logs all logs written via Logcat (Android specific). Defaults to `false`. */
   enableLogcatLogging?: boolean;
 }
 
