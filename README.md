@@ -1,21 +1,6 @@
 # React Native plugin for Bugfender
 
-## Getting started
-
-The Bugfender bindings for React Native depend on the native iOS and Android Bugfender SDKs.
-
-## Creating a RN new project compatible with Bugfender
-
-You can create a new project using
-
-`$ npx react-native init AwesomeProject`
-
-or if you already started your project using the tool `create-react-native-app` you will need to `eject` your project in order to add native modules.
-
-More info can be found in the [official docs](https://facebook.github.io/react-native/docs/getting-started)
-
-Before moving to the next point **compile the project and ensure you can execute**.
-In this way, we can discard issues in the next steps.
+Bugfender module for React Native and React Native for the Web. It depends on the iOS, Android and Javascript Bugfender SDKs.
 
 ## Adding Bugfender to your project
 
@@ -27,7 +12,7 @@ Add the bugfender plugin from npm
 
 `$ npm install @bugfender/rn-bugfender --save`
 
-### Android
+### Android & React Native for the Web
 You are done!
 
 ### iOS
@@ -75,9 +60,25 @@ Bugfender.init({
   // printToConsole: true,
   // logUIEvents: true,
   // registerErrorHandler: true,
-  // deviceName: 'Anonymous Phone',
-  // enableLogcatLogging: false,
+  // deviceName: 'Anonymous',
+  // enableLogcatLogging: false, // Android specific
+  // logBrowserEvents: true, // Web specific
+  // build: '42', // Web specific
+  // version: '1.0', // Web sprecific
 });
+
+// Alternatively, SDKOptionsBuilder can be used to make it apparent what options are specific of certain platforms
+Bugfender.init(
+  new SDKOptionsBuilder({
+    appKey: '<YOUR APP KEY>',
+  }).native({
+    enableLogcatLogging: false,
+  }).web({
+    logBrowserEvents: true,
+    build: '42',
+    version: '1.0',
+  }).build()
+);
 
 // Send logs with different levels
 Bugfender.log('This is a debug log in Bugfender from React Native');
