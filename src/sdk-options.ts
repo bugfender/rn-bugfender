@@ -1,4 +1,5 @@
 import type {ISDKOptions} from "./types/sdk-options";
+import {removeUndefinedAttributes} from "./utilities";
 
 export class SDKOptions {
   protected rules = {
@@ -16,6 +17,9 @@ export class SDKOptions {
   public init(options: ISDKOptions): ISDKOptions {
     // Validate user provided options
     this.validate(options);
+
+    options = { ...options };
+    removeUndefinedAttributes(options);
 
     // Set default values if needed
     return {

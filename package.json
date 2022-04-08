@@ -1,6 +1,6 @@
 {
   "name": "@bugfender/rn-bugfender",
-  "version": "2.0.0",
+  "version": "2.0.0-alpha.0",
   "description": "React Native bindings for Bugfender SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -14,7 +14,7 @@
     "android",
     "ios",
     "cpp",
-    "RNBugfender.podspec",
+    "RnBugfender.podspec",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build",
@@ -153,6 +153,7 @@
     ]
   },
   "dependencies": {
+    "@bugfender/sdk": "^2.0.0-alpha.0",
     "util": "^0.12.4"
   }
 }

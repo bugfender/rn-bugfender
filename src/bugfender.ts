@@ -1,18 +1,18 @@
-import {NativeModules, Platform} from 'react-native';
-import type {ISDKOptions} from './types/sdk-options';
-import type {UserFeedbackOptions, UserFeedbackResult} from './user-feedback';
-import {DefaultUserFeedbackOptions} from './user-feedback';
-import type {DeviceKeyValue} from './types/device';
-import type {ILogEntry} from './types/log';
-import {StringFormatter} from './string-formatter';
-import {LogLevel} from "./types/log";
-import {OverrideConsoleMethods} from "./override-console-methods";
-import {PrintToConsole} from "./print-to-console";
-import {SDKOptions} from "./sdk-options";
+import { NativeModules, Platform } from 'react-native';
+import type { ISDKOptions } from './types/sdk-options';
+import type { UserFeedbackOptions, UserFeedbackResult } from './user-feedback';
+import { DefaultUserFeedbackOptions } from './user-feedback';
+import type { DeviceKeyValue } from './types/device';
+import type { ILogEntry } from './types/log';
+import { StringFormatter } from './string-formatter';
+import { LogLevel } from "./types/log";
+import { OverrideConsoleMethods } from "./override-console-methods";
+import { PrintToConsole } from "./print-to-console";
+import { SDKOptions } from "./sdk-options";
 
 const LINKING_ERROR =
   `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ios: "- You have run 'pod install'\n", default: ''}) +
+  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
@@ -34,7 +34,7 @@ class BugfenderClass {
   private sdkOptions: SDKOptions = new SDKOptions();
   private initialized = false;
 
-  public init(options: ISDKOptions) {
+  public async init(options: ISDKOptions): Promise<void> {
     if (!this.initialized) {
       const validatedOptions = this.sdkOptions.init(options);
 
@@ -115,8 +115,8 @@ class BugfenderClass {
   ): Promise<UserFeedbackResult> {
     return new Promise<UserFeedbackResult>((resolve) => {
       options = {
-         ...new DefaultUserFeedbackOptions(),
-         ...(options ?? {}),
+        ...new DefaultUserFeedbackOptions(),
+        ...(options ?? {}),
       };
 
       return RnBugfender.showUserFeedback(
