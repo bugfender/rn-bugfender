@@ -1,3 +1,5 @@
+import {removeUndefinedAttributes} from "../utilities";
+
 export interface ISDKCommonOptions {
   /** The app key to log into */
   appKey: string;
@@ -68,13 +70,7 @@ export class SDKOptionsBuilder {
       enableLogcatLogging: this.nativeOptions?.enableLogcatLogging,
     };
 
-    // Removing undefined attributes
-    Object.entries(options).forEach(([key, value]) => {
-      if (value === undefined) {
-        // @ts-ignore
-        delete options[key];
-      }
-    });
+    removeUndefinedAttributes(options);
 
     return options;
   }

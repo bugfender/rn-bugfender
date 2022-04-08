@@ -1,4 +1,5 @@
 import type {ISDKOptions} from "./types/sdk-options";
+import {removeUndefinedAttributes} from "./utilities";
 
 export class SDKOptions {
   protected rules = {
@@ -17,14 +18,8 @@ export class SDKOptions {
     // Validate user provided options
     this.validate(options);
 
-    // Removing undefined attributes
     options = { ...options };
-    Object.entries(options).forEach(([key, value]) => {
-      if (value === undefined) {
-        // @ts-ignore
-        delete options[key];
-      }
-    });
+    removeUndefinedAttributes(options);
 
     // Set default values if needed
     return {
