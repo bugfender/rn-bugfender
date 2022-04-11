@@ -168,7 +168,7 @@ The Web SDK API has changed in order be unified with [Bugfender Web SDK](https:/
   * `e` renamed to `error`
   * `log` renamed to `sendLog`
 
-* `setDeviceKey` method replaces `setDeviceBoolean`, `setDeviceString`, `setDeviceInteger & `setDeviceFloat`
+* `setDeviceKey` method replaces `setDeviceBoolean`, `setDeviceString`, `setDeviceInteger` & `setDeviceFloat`
 
 ## Cocoapods Troubleshooting
 We did our best to create a installation process that worked for most of the users. However, the React Native configuration can be tricky sometimes.
