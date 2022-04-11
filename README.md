@@ -136,6 +136,9 @@ Bugfender.setDeviceKey('device.key.boolean', true);
 Bugfender.setDeviceKey('device.key.float', 10.1);
 Bugfender.setDeviceKey('device.key.integer', 102);
 
+// Remove device values
+Bugfender.removeDeviceKey('device.key.integer');
+
 // Get different URLs
 Bugfender.getDeviceURL().then((url) => console.log('Device url: %s', url));
 Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
@@ -143,6 +146,29 @@ Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
 // Synchronizes all logs and issues with the server once
 Bugfender.forceSendOnce();
 ```
+## Changelog
+The changelog of the Bugfender Web SDK can be found in ReleaseNotes under the [react-native](https://bugfender.releasenotes.io/tag/react-native) tag. For all the Bugfender product changes please visit the general release notes.
+
+### 2.x Breaking Changes
+The Web SDK API has changed in order be unified with [Bugfender Web SDK](https://www.npmjs.com/package/@bugfender/sdk):
+* The following methods have been removed and replaced with init method attributes:
+  * `setApiUrl`
+  * `setBaseUrl`
+  * `overrideDeviceName`
+  * `setMaximumLocalStorageSize`
+  * `enableLogcatLogging`
+  * `enableCrashReporting`
+  * `enableUIEventLogging`
+
+* The following methods have been renamed:
+  * `setForceEnabled` renamed to `sendForceOnce`
+  * `showUserFeedback` renamed to `sendUserFeedback`
+  * `d` rename to `debug`
+  * `w` renamed to `warn`
+  * `e` renamed to `error`
+  * `log` renamed to `sendLog`
+
+* `setDeviceKey` method replaces `setDeviceBoolean`, `setDeviceString`, `setDeviceInteger & `setDeviceFloat`
 
 ## Cocoapods Troubleshooting
 We did our best to create a installation process that worked for most of the users. However, the React Native configuration can be tricky sometimes.
