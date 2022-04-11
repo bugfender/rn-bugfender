@@ -174,6 +174,8 @@ export default function App() {
     Bugfender.setDeviceKey('device.key.boolean', true);
     Bugfender.setDeviceKey('device.key.float', 10.1);
     Bugfender.setDeviceKey('device.key.integer', 102);
+    Bugfender.setDeviceKey('device.key.integer2', 104);
+    Bugfender.removeDeviceKey('device.key.integer2');
 
     Bugfender.sendIssue('Issue One', 'Issue Message One').then((url) =>
       console.log('Issue url: %s', url)
