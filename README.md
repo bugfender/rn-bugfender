@@ -150,7 +150,7 @@ Bugfender.forceSendOnce();
 The changelog of the Bugfender Web SDK can be found in ReleaseNotes under the [react-native](https://bugfender.releasenotes.io/tag/react-native) tag. For all the Bugfender product changes please visit the general release notes.
 
 ### 2.x Breaking Changes
-The Web SDK API has changed in order be unified with [Bugfender Web SDK](https://www.npmjs.com/package/@bugfender/sdk):
+The React Native SDK API has changed in order be unified with [Bugfender Web SDK](https://www.npmjs.com/package/@bugfender/sdk):
 * The following methods have been removed and replaced with init method attributes:
   * `setApiUrl`
   * `setBaseUrl`
