@@ -47,6 +47,20 @@ Download the latest release from [Github](https://github.com/bugfender/Bugfender
 
 * Make sure you have linked `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` as well.
 
+## Upgrading from version 1.x
+After updating to version 2.x from version 1.x you should perform the following extra steps:
+### Android
+Open `MainApplication` class inside `android/app/src/main/java/com.<your_app>/` folder and remove any references to `com.bugfender.react.RNBugfenderPackage`
+### iOS
+Open `Podfile` inside `ios` folder and remove the following line:
+```
+pod 'RNBugfender', :path => '../node_modules/@bugfender/rn-bugfender'
+```
+and then execute the following command under `ios` folder:
+```
+pod deintegrate && pod install
+```
+
 ## RNBugfender Usage
 ```typescript
 import { Bugfender, LogLevel } from '@bugfender/rn-bugfender';
