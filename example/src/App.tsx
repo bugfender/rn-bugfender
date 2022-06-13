@@ -95,10 +95,6 @@ export default function App() {
     throw new Error('Force crash' + 'Time: ' + hours + ':' + min + ':' + sec);
   }
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   async function _onPressButton(): Promise<void> {
 
     Bugfender.sendLog({
