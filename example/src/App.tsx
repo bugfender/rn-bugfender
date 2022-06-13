@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Button, Linking, StyleSheet, Text, View } from 'react-native';
-import { Bugfender, LogLevel, SDKOptionsBuilder } from '@bugfender/rn-bugfender';
+import {Button, Linking, StyleSheet, Text, View} from 'react-native';
+import {Bugfender, LogLevel, SDKOptionsBuilder} from '@bugfender/rn-bugfender';
 
 export default function App() {
 
@@ -94,20 +94,18 @@ export default function App() {
     const sec = date.getSeconds(); //Current Seconds
     throw new Error('Force crash' + 'Time: ' + hours + ':' + min + ':' + sec);
   }
+
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   async function _onPressButton(): Promise<void> {
-    while (true) {
-      await sleep(10);
 
-      Bugfender.sendLog({
-        level: LogLevel.Debug,
-        tag: 'REACT',
-        text: 'Im being called from React!',
-      });
-    }
+    Bugfender.sendLog({
+      level: LogLevel.Debug,
+      tag: 'REACT',
+      text: 'Im being called from React!',
+    });
 
     Bugfender.log('Log without break lines in the middle of the message');
     Bugfender.log('Log with break lines \n\n in the middle of the message');
