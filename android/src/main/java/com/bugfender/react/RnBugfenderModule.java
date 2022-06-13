@@ -60,8 +60,8 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
   }
 
   @ReactMethod
-  public void setMaximumLocalStorageSize(Integer sizeInMB) {
-    Bugfender.setMaximumLocalStorageSize(sizeInMB * 1024);
+  public void setMaximumLocalStorageSize(Integer sizeInBytes) {
+    Bugfender.setMaximumLocalStorageSize(sizeInBytes);
   }
 
   @ReactMethod

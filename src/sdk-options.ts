@@ -28,6 +28,7 @@ export class SDKOptions {
       logUIEvents: true,
       registerErrorHandler: true,
       enableLogcatLogging: false,
+      maximumLocalStorageSize: 5 * 1024 * 1024,
       ...options,
     };
   }

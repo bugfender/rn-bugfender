@@ -27,6 +27,7 @@ export default function App() {
           logBrowserEvents: true,
         })
         .native({
+          maximumLocalStorageSize: 1024 * 1024,
           enableLogcatLogging: false,
         })
         .build()
@@ -93,13 +94,20 @@ export default function App() {
     const sec = date.getSeconds(); //Current Seconds
     throw new Error('Force crash' + 'Time: ' + hours + ':' + min + ':' + sec);
   }
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-  function _onPressButton(): void {
-    Bugfender.sendLog({
-      level: LogLevel.Debug,
-      tag: 'REACT',
-      text: 'Im being called from React!',
-    });
+  async function _onPressButton(): Promise<void> {
+    while (true) {
+      await sleep(10);
+
+      Bugfender.sendLog({
+        level: LogLevel.Debug,
+        tag: 'REACT',
+        text: 'Im being called from React!',
+      });
+    }
 
     Bugfender.log('Log without break lines in the middle of the message');
     Bugfender.log('Log with break lines \n\n in the middle of the message');

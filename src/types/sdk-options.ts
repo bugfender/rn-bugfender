@@ -29,6 +29,8 @@ export interface ISDKWebOptions {
 }
 
 export interface ISDKNativeOptions {
+  /** Set the maximum size to store local log files in bytes (Native specific). Range accepted is from 1 MB to 50 MB. Defaults to 5 MB. **/
+  maximumLocalStorageSize?: number;
   /** Logs all logs written via Logcat (Android specific). Defaults to `false`. */
   enableLogcatLogging?: boolean;
 }
@@ -68,6 +70,7 @@ export class SDKOptionsBuilder {
       build: this.webOptions?.build,
       version: this.webOptions?.version,
       enableLogcatLogging: this.nativeOptions?.enableLogcatLogging,
+      maximumLocalStorageSize: this.nativeOptions?.maximumLocalStorageSize,
     };
 
     removeUndefinedAttributes(options);
