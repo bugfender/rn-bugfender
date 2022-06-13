@@ -353,6 +353,11 @@ class BugfenderClass {
     this.printToConsole.info(`Force send once`);
     RnBugfender.forceSendOnce();
   }
+
+  public setForceEnabled(enabled: boolean): void {
+    this.printToConsole.info(`Set force enabled set to ${enabled}`);
+    RnBugfender.setForceEnabled(enabled);
+  }
 }
 
 export {

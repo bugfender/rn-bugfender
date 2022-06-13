@@ -196,6 +196,10 @@ export default function App() {
     Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
 
     Bugfender.forceSendOnce();
+
+    Bugfender.setForceEnabled(true);
+
+    Bugfender.setForceEnabled(false);
   }
 
   function _onPressShowUserFeedback(): void {

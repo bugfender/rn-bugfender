@@ -1073,10 +1073,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bugfender/sdk@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@bugfender/sdk/-/sdk-2.0.0.tgz#820bb1e8712ae8eb365d9638a222de87b006d9e4"
-  integrity sha512-JNf4QGkciXjvx5CU0PXyEXu5Z5c7AE5U4NyC9fFaDokwXkzI9gZT5kDMkCQgKD7OXh9QwqjUNBUsQZNBBoaXEw==
+"@bugfender/sdk@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@bugfender/sdk/-/sdk-2.1.0.tgz#7447e14aaff15a6ea350b83428c2625afcaaa91b"
+  integrity sha512-IzixkqA/ltA4A/GmLNGeLcFKJwZmrwC9s3Q0K+DjUMoD1Eb6OXB8f3vVWAIVnbfP0zYWtxCbtMb77IFfyBXNvQ==
   dependencies:
     base-58 "0.0.1"
     bowser "^2.11.0"
