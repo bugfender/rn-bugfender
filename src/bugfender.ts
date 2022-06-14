@@ -5,10 +5,9 @@ import { DefaultUserFeedbackOptions } from './user-feedback';
 import type { DeviceKeyValue } from './types/device';
 import type { ILogEntry } from './types/log';
 import { StringFormatter } from './string-formatter';
-import { LogLevel } from "./types/log";
-import { OverrideConsoleMethods } from "./override-console-methods";
-import { PrintToConsole } from "./print-to-console";
-import { SDKOptions } from "./sdk-options";
+import { LogLevel } from './types/log';
+import { PrintToConsole } from './print-to-console';
+import { SDKOptions } from './sdk-options';
 
 const LINKING_ERROR =
   `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
@@ -29,7 +28,8 @@ const RnBugfender = NativeModules.RnBugfender
 
 class BugfenderClass {
   private stringFormatter = new StringFormatter();
-  private overrideConsoleMethods = new OverrideConsoleMethods(window);
+  private overrideConsoleMethods =
+    new (require('./override-console-methods').OverrideConsoleMethods)(window);
   private printToConsole = new PrintToConsole(global.console);
   private sdkOptions: SDKOptions = new SDKOptions();
   private initialized = false;
