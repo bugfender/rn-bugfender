@@ -75,7 +75,7 @@ Bugfender.init({
   // logUIEvents: true,
   // registerErrorHandler: true,
   // deviceName: 'Anonymous',
-  // maximumLocalStorageSize: 10 * 1024 * 1024, // Native specific
+  // maximumLocalStorageSize: 5 * 1024 * 1024, // Native specific
   // enableLogcatLogging: false, // Android specific
   // logBrowserEvents: true, // Web specific
   // build: '42', // Web specific
