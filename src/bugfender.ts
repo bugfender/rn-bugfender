@@ -63,20 +63,18 @@ class BugfenderClass {
       // endregion init
 
       // region after init
-      setTimeout(() => {
-        if (validatedOptions.enableLogcatLogging) {
-          RnBugfender.enableLogcatLogging();
-        }
-        if (validatedOptions.logUIEvents) {
-          RnBugfender.enableUIEventLogging();
-        }
-        if (validatedOptions.registerErrorHandler) {
-          RnBugfender.enableCrashReporting();
-        }
-        RnBugfender.setMaximumLocalStorageSize(
-          validatedOptions.maximumLocalStorageSize
-        );
-      }, 2000); // Wait for BF to be initialized
+      if (validatedOptions.enableLogcatLogging) {
+        RnBugfender.enableLogcatLogging();
+      }
+      if (validatedOptions.logUIEvents) {
+        RnBugfender.enableUIEventLogging();
+      }
+      if (validatedOptions.registerErrorHandler) {
+        RnBugfender.enableCrashReporting();
+      }
+      RnBugfender.setMaximumLocalStorageSize(
+        validatedOptions.maximumLocalStorageSize
+      );
       // endregion after init
 
       this.initialized = true;
