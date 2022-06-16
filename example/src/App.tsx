@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Button, Linking, StyleSheet, Text, View } from 'react-native';
-import { Bugfender, LogLevel, SDKOptionsBuilder } from '@bugfender/rn-bugfender';
+import {Button, Linking, StyleSheet, Text, View} from 'react-native';
+import {Bugfender, LogLevel, SDKOptionsBuilder} from '@bugfender/rn-bugfender';
 
 export default function App() {
 
@@ -27,6 +27,7 @@ export default function App() {
           logBrowserEvents: true,
         })
         .native({
+          maximumLocalStorageSize: 1024 * 1024,
           enableLogcatLogging: false,
         })
         .build()
@@ -94,7 +95,8 @@ export default function App() {
     throw new Error('Force crash' + 'Time: ' + hours + ':' + min + ':' + sec);
   }
 
-  function _onPressButton(): void {
+  async function _onPressButton(): Promise<void> {
+
     Bugfender.sendLog({
       level: LogLevel.Debug,
       tag: 'REACT',
