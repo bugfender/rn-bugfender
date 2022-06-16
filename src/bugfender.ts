@@ -53,7 +53,7 @@ class BugfenderClass {
       // region init
       Platform.OS === 'ios'
         ? RnBugfender.activateLogger(validatedOptions.appKey)
-        : RnBugfender.init(validatedOptions.appKey, false);
+        : RnBugfender.init(validatedOptions.appKey, validatedOptions.printToConsole ?? false);
 
       if (validatedOptions.overrideConsoleMethods) {
         this.overrideConsoleMethods.init(this.stringFormatter);
