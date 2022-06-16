@@ -1,18 +1,18 @@
-import { NativeModules, Platform } from 'react-native';
-import type { ISDKOptions } from './types/sdk-options';
-import type { UserFeedbackOptions, UserFeedbackResult } from './user-feedback';
-import { DefaultUserFeedbackOptions } from './user-feedback';
-import type { DeviceKeyValue } from './types/device';
-import type { ILogEntry } from './types/log';
-import { StringFormatter } from './string-formatter';
-import { LogLevel } from "./types/log";
-import { OverrideConsoleMethods } from "./override-console-methods";
-import { PrintToConsole } from "./print-to-console";
-import { SDKOptions } from "./sdk-options";
+import {NativeModules, Platform} from 'react-native';
+import type {ISDKOptions} from './types/sdk-options';
+import type {UserFeedbackOptions, UserFeedbackResult} from './user-feedback';
+import {DefaultUserFeedbackOptions} from './user-feedback';
+import type {DeviceKeyValue} from './types/device';
+import type {ILogEntry} from './types/log';
+import {StringFormatter} from './string-formatter';
+import {LogLevel} from "./types/log";
+import {OverrideConsoleMethods} from "./override-console-methods";
+import {PrintToConsole} from "./print-to-console";
+import {SDKOptions} from "./sdk-options";
 
 const LINKING_ERROR =
   `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
+  Platform.select({ios: "- You have run 'pod install'\n", default: ''}) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
@@ -38,41 +38,44 @@ class BugfenderClass {
     if (!this.initialized) {
       const validatedOptions = this.sdkOptions.init(options);
 
-      // Needs to be executed prior initialization
+      // region before init
       if (typeof options.deviceName !== 'undefined') {
         RnBugfender.overrideDeviceName(options.deviceName);
       }
-
-      // Library initialization
-      Platform.OS === 'ios'
-        ? RnBugfender.activateLogger(validatedOptions.appKey)
-        : RnBugfender.init(validatedOptions.appKey, false);
-
       if (typeof validatedOptions.apiURL !== 'undefined') {
         RnBugfender.setApiUrl(validatedOptions.apiURL);
       }
-
       if (typeof validatedOptions.baseURL !== 'undefined') {
         RnBugfender.setBaseUrl(validatedOptions.baseURL);
       }
+      // endregion before init
 
-      if (validatedOptions.enableLogcatLogging) {
-        RnBugfender.enableLogcatLogging();
-      }
-
-      if (validatedOptions.logUIEvents) {
-        RnBugfender.enableUIEventLogging();
-      }
-
-      if (validatedOptions.registerErrorHandler) {
-        RnBugfender.enableCrashReporting();
-      }
+      // region init
+      Platform.OS === 'ios'
+        ? RnBugfender.activateLogger(validatedOptions.appKey)
+        : RnBugfender.init(validatedOptions.appKey, validatedOptions.printToConsole ?? false);
 
       if (validatedOptions.overrideConsoleMethods) {
         this.overrideConsoleMethods.init(this.stringFormatter);
       }
 
       this.printToConsole.init(validatedOptions.printToConsole ?? true);
+      // endregion init
+
+      // region after init
+      if (validatedOptions.enableLogcatLogging) {
+        RnBugfender.enableLogcatLogging();
+      }
+      if (validatedOptions.logUIEvents) {
+        RnBugfender.enableUIEventLogging();
+      }
+      if (validatedOptions.registerErrorHandler) {
+        RnBugfender.enableCrashReporting();
+      }
+      RnBugfender.setMaximumLocalStorageSize(
+        validatedOptions.maximumLocalStorageSize
+      );
+      // endregion after init
 
       this.initialized = true;
     }
@@ -352,6 +355,11 @@ class BugfenderClass {
   public forceSendOnce(): void {
     this.printToConsole.info(`Force send once`);
     RnBugfender.forceSendOnce();
+  }
+
+  public setForceEnabled(enabled: boolean): void {
+    this.printToConsole.info(`Set force enabled set to ${enabled}`);
+    RnBugfender.setForceEnabled(enabled);
   }
 }
 
