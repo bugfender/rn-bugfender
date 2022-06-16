@@ -1,18 +1,17 @@
-import {NativeModules, Platform} from 'react-native';
-import type {ISDKOptions} from './types/sdk-options';
-import type {UserFeedbackOptions, UserFeedbackResult} from './user-feedback';
-import {DefaultUserFeedbackOptions} from './user-feedback';
-import type {DeviceKeyValue} from './types/device';
-import type {ILogEntry} from './types/log';
-import {StringFormatter} from './string-formatter';
-import {LogLevel} from "./types/log";
-import {OverrideConsoleMethods} from "./override-console-methods";
-import {PrintToConsole} from "./print-to-console";
-import {SDKOptions} from "./sdk-options";
+import { NativeModules, Platform } from 'react-native';
+import type { ISDKOptions } from './types/sdk-options';
+import type { UserFeedbackOptions, UserFeedbackResult } from './user-feedback';
+import { DefaultUserFeedbackOptions } from './user-feedback';
+import type { DeviceKeyValue } from './types/device';
+import type { ILogEntry } from './types/log';
+import { StringFormatter } from './string-formatter';
+import { LogLevel } from './types/log';
+import { PrintToConsole } from './print-to-console';
+import { SDKOptions } from './sdk-options';
 
 const LINKING_ERROR =
   `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ios: "- You have run 'pod install'\n", default: ''}) +
+  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
@@ -29,7 +28,8 @@ const RnBugfender = NativeModules.RnBugfender
 
 class BugfenderClass {
   private stringFormatter = new StringFormatter();
-  private overrideConsoleMethods = new OverrideConsoleMethods(window);
+  private overrideConsoleMethods =
+    new (require('./override-console-methods').OverrideConsoleMethods)(window);
   private printToConsole = new PrintToConsole(global.console);
   private sdkOptions: SDKOptions = new SDKOptions();
   private initialized = false;
