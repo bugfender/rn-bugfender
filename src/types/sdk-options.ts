@@ -1,4 +1,4 @@
-import {removeUndefinedAttributes} from "../utilities";
+import {removeUndefinedProperties} from '@bugfender/types';
 
 export interface ISDKCommonOptions {
   /** The app key to log into */
@@ -73,7 +73,7 @@ export class SDKOptionsBuilder {
       maximumLocalStorageSize: this.nativeOptions?.maximumLocalStorageSize,
     };
 
-    removeUndefinedAttributes(options);
+    removeUndefinedProperties(options);
 
     return options;
   }

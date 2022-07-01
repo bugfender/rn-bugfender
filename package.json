@@ -115,17 +115,19 @@
       "prettier"
     ],
     "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
+      "prettier/prettier": "off"
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.ts",
+          "*.tsx"
+        ],
+        "rules": {
+          "no-dupe-class-members": "off"
         }
-      ]
-    }
+      }
+    ]
   },
   "eslintIgnore": [
     "node_modules/",
@@ -154,6 +156,6 @@
   },
   "dependencies": {
     "@bugfender/sdk": "^2.1.0",
-    "util": "^0.12.4"
+    "@bugfender/types": "1.0.0-alpha.3"
   }
 }

@@ -1087,6 +1087,13 @@
     stack-generator "^2.0.5"
     util "^0.12.4"
 
+"@bugfender/types@1.0.0-alpha.3":
+  version "1.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@bugfender/types/-/types-1.0.0-alpha.3.tgz#6fee73fa4fca2e97865feda1521c5950608903ed"
+  integrity sha512-d3sJ538D4zqcLdk64pw63vQa+jci512etLSz6PWjRccjsRF92MkXvCqHT2f31lcrtlHs4op5EKooGkR5Y5XAOg==
+  dependencies:
+    util "^0.12.4"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"

@@ -1,12 +1,8 @@
 import { NativeModules, Platform } from 'react-native';
+import { BugfenderFacade, DeviceKeyValue, LogEntry, LogLevel, PrintToConsole, UserFeedbackResult, format } from '@bugfender/types';
 import type { ISDKOptions } from './types/sdk-options';
-import type { UserFeedbackOptions, UserFeedbackResult } from './user-feedback';
+import type { UserFeedbackOptions } from './user-feedback';
 import { DefaultUserFeedbackOptions } from './user-feedback';
-import type { DeviceKeyValue } from './types/device';
-import type { ILogEntry } from './types/log';
-import { StringFormatter } from './string-formatter';
-import { LogLevel } from './types/log';
-import { PrintToConsole } from './print-to-console';
 import { SDKOptions } from './sdk-options';
 
 const LINKING_ERROR =
@@ -26,8 +22,7 @@ const RnBugfender = NativeModules.RnBugfender
     }
   );
 
-class BugfenderClass {
-  private stringFormatter = new StringFormatter();
+class BugfenderClass implements BugfenderFacade {
   private overrideConsoleMethods =
     new (require('./override-console-methods').OverrideConsoleMethods)(window);
   private printToConsole = new PrintToConsole(global.console);
@@ -56,7 +51,7 @@ class BugfenderClass {
         : RnBugfender.init(validatedOptions.appKey, validatedOptions.printToConsole ?? false);
 
       if (validatedOptions.overrideConsoleMethods) {
-        this.overrideConsoleMethods.init(this.stringFormatter);
+        this.overrideConsoleMethods.init();
       }
 
       this.printToConsole.init(validatedOptions.printToConsole ?? true);
@@ -160,7 +155,7 @@ class BugfenderClass {
   public log(...parameters: unknown[]): void {
     this.printToConsole.log(...parameters);
 
-    let message = this.stringFormatter.format([...parameters]);
+    let message = format([...parameters]);
     RnBugfender.debug('', message);
   }
 
@@ -179,7 +174,7 @@ class BugfenderClass {
   public warn(...parameters: unknown[]): void {
     this.printToConsole.warn(...parameters);
 
-    let message = this.stringFormatter.format([...parameters]);
+    let message = format([...parameters]);
     RnBugfender.warning('', message);
   }
 
@@ -198,7 +193,7 @@ class BugfenderClass {
   public error(...parameters: unknown[]): void {
     this.printToConsole.error(...parameters);
 
-    let message = this.stringFormatter.format([...parameters]);
+    let message = format([...parameters]);
     RnBugfender.error('', message);
   }
 
@@ -217,7 +212,7 @@ class BugfenderClass {
   public trace(...parameters: unknown[]): void {
     this.printToConsole.trace(...parameters);
 
-    let message = this.stringFormatter.format([...parameters]);
+    let message = format([...parameters]);
     RnBugfender.trace('', message);
   }
 
@@ -236,7 +231,7 @@ class BugfenderClass {
   public info(...parameters: unknown[]): void {
     this.printToConsole.info(...parameters);
 
-    let message = this.stringFormatter.format([...parameters]);
+    let message = format([...parameters]);
     RnBugfender.info('', message);
   }
 
@@ -255,7 +250,7 @@ class BugfenderClass {
   public fatal(...parameters: unknown[]): void {
     this.printToConsole.error(...parameters);
 
-    let message = this.stringFormatter.format([...parameters]);
+    let message = format([...parameters]);
     RnBugfender.fatal('', message);
   }
 
@@ -274,7 +269,7 @@ class BugfenderClass {
    *
    * @param log Log object that complies with `ILogEntry` interface.
    */
-  public sendLog(log: ILogEntry): void {
+  public sendLog(log: LogEntry): void {
     this.printToConsole.printLog(log);
 
     RnBugfender.log(
