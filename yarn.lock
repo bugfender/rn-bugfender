@@ -1073,6 +1073,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bugfender/common@1.0.0-alpha.0":
+  version "1.0.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@bugfender/common/-/common-1.0.0-alpha.0.tgz#9d61d0ef569ee83ce35d5c9daf5734b6a99c8786"
+  integrity sha512-QDeEXihO4Z5kuYi/1+heWQNqR+eYxQiz4JcW4StMQXZtO7AnXZGw/ndqNHhjjaoWjCotKioSa30gEVdFg2XsQg==
+  dependencies:
+    util "^0.12.4"
+
 "@bugfender/sdk@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@bugfender/sdk/-/sdk-2.1.0.tgz#7447e14aaff15a6ea350b83428c2625afcaaa91b"
@@ -1085,13 +1092,6 @@
     error-stack-parser "^2.0.7"
     js-sha256 "^0.9.0"
     stack-generator "^2.0.5"
-    util "^0.12.4"
-
-"@bugfender/types@1.0.0-alpha.3":
-  version "1.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@bugfender/types/-/types-1.0.0-alpha.3.tgz#6fee73fa4fca2e97865feda1521c5950608903ed"
-  integrity sha512-d3sJ538D4zqcLdk64pw63vQa+jci512etLSz6PWjRccjsRF92MkXvCqHT2f31lcrtlHs4op5EKooGkR5Y5XAOg==
-  dependencies:
     util "^0.12.4"
 
 "@cnakazawa/watch@^1.0.3":

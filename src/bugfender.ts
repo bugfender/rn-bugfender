@@ -1,5 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
-import { BugfenderFacade, DeviceKeyValue, LogEntry, LogLevel, PrintToConsole, UserFeedbackResult, format } from '@bugfender/types';
+import { BugfenderFacade, DeviceKeyValue, LogEntry, LogLevel, PrintToConsole, UserFeedbackResult, format } from '@bugfender/common';
 import type { ISDKOptions } from './types/sdk-options';
 import type { UserFeedbackOptions } from './user-feedback';
 import { DefaultUserFeedbackOptions } from './user-feedback';

@@ -1,4 +1,4 @@
-import type { UserFeedbackOptions as BaseUserFeebackOptions } from '@bugfender/types';
+import type { UserFeedbackOptions as BaseUserFeebackOptions } from '@bugfender/common';
 
 /**
  * Options object for `Bugfender.getUserFeedback` with customised modal strings.

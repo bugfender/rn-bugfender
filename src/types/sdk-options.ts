@@ -1,4 +1,4 @@
-import {removeUndefinedProperties} from '@bugfender/types';
+import {removeUndefinedProperties} from '@bugfender/common';
 
 export interface ISDKCommonOptions {
   /** The app key to log into */

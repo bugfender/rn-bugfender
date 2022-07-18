@@ -1,4 +1,4 @@
-import {format} from '@bugfender/types';
+import {format} from '@bugfender/common';
 import {RnBugfender} from "./bugfender";
 
 /**

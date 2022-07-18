@@ -155,7 +155,7 @@
     ]
   },
   "dependencies": {
-    "@bugfender/sdk": "^2.1.0",
-    "@bugfender/types": "1.0.0-alpha.3"
+    "@bugfender/common": "1.0.0-alpha.0",
+    "@bugfender/sdk": "^2.1.0"
   }
 }
