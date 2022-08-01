@@ -1,8 +1,8 @@
 import type {ISDKOptions} from "./types/sdk-options";
-import {removeUndefinedAttributes} from "./utilities";
+import {prepareOptions, validate, ValidationRules} from "@bugfender/common";
 
 export class SDKOptions {
-  protected rules = {
+  protected rules: ValidationRules = {
     appKey: ['required', 'string'],
     apiURL: ['string', 'url'],
     baseURL: ['string', 'url'],
@@ -15,11 +15,11 @@ export class SDKOptions {
   };
 
   public init(options: ISDKOptions): ISDKOptions {
-    // Validate user provided options
-    this.validate(options);
+    // Prepare options
+    options = prepareOptions(options);
 
-    options = { ...options };
-    removeUndefinedAttributes(options);
+    // Validate user provided options
+    validate(options, this.rules);
 
     // Set default values if needed
     return {
@@ -31,34 +31,5 @@ export class SDKOptions {
       maximumLocalStorageSize: 5 * 1024 * 1024,
       ...options,
     };
-  }
-
-  protected validate(options: ISDKOptions): void {
-    const urlValidator = new RegExp(/^http(s)?:\/\//i);
-
-    Object.entries(this.rules).forEach(([key, rules]) => {
-      // @ts-ignore
-      const value = options[key];
-
-      rules.forEach(rule => {
-        if (rule === 'required') {
-          if (typeof value === 'undefined') {
-            throw new Error(`Bugfender requires '${key}' option to initialize.`)
-          }
-        } else if (rule === 'string') {
-          if (!['string', 'undefined'].includes(typeof value)) {
-            throw new Error(`'${key}' option must be a string.`);
-          }
-        } else if (rule === 'url') {
-          if (typeof value !== 'undefined' && !urlValidator.test(value)) {
-            throw new Error(`'${key}' option must be a valid URL.`);
-          }
-        } else if (rule === 'boolean') {
-          if (!['boolean', 'undefined'].includes(typeof value)) {
-            throw new Error(`'${key}' option must be a boolean.`);
-          }
-        }
-      })
-    });
   }
 }

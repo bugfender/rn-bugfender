@@ -1,17 +1,11 @@
+import type { UserFeedbackOptions as BaseUserFeebackOptions } from '@bugfender/common';
+
 /**
  * Options object for `Bugfender.getUserFeedback` with customised modal strings.
  */
-export interface UserFeedbackOptions {
-  /** Default: `Feedback`. */
-  title?: string;
+export interface UserFeedbackOptions extends BaseUserFeebackOptions {
   /** Default `Please insert your feedback here and click send`. */
   hint?: string;
-  /** Default: `Subject…`. */
-  subjectPlaceholder?: string;
-  /** Default: `Your feedback…`. */
-  feedbackPlaceholder?: string;
-  /** Default: `Send`. */
-  submitLabel?: string;
   /** Default: `Close`. This attribute is only used on iOS */
   closeLabel?: string;
 }
@@ -23,11 +17,4 @@ export class DefaultUserFeedbackOptions implements Required<UserFeedbackOptions>
   public feedbackPlaceholder = 'Your feedback…';
   public submitLabel = 'Send';
   public closeLabel = 'Close';
-}
-
-export interface UserFeedbackResult {
-  /** `true` if the user has sent the feedback. `false` if she has closed the modal without sending it. */
-  isSent: boolean;
-  /** If the feedback was sent this will contain the Bugfender URL for the feedback. */
-  feedbackURL?: string;
 }
