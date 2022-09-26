@@ -2,8 +2,11 @@
 #import <BugfenderSDK/BugfenderSDK.h>
 #import <React/RCTUtils.h>
 
-@implementation RnBugfender
+#ifdef RCT_NEW_ARCH_ENABLED
+#import "RNRnBugfenderSpec.h"
+#endif
 
+@implementation RnBugfender
 RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(activateLogger:(NSString *)key)
@@ -135,7 +138,7 @@ RCT_EXPORT_METHOD(log:(int)lineNumber method:(NSString *)method file:(NSString *
         logLevel = BFLogLevelInfo;
     else if (rawLogLevel == 5)
         logLevel = BFLogLevelFatal;
-
+    
     [Bugfender logWithLineNumber:lineNumber method:method file:file level:logLevel tag:tag message:message];
 }
 
@@ -174,10 +177,10 @@ RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subje
             reject(0, @"Feedback not sent", nil);
         }
     }];
-
+    
     UIViewController* vc = RCTPresentedViewController();
     [vc presentViewController:controller animated:YES completion:nil];
-
+    
     /*
      * Another option might be using the window.
      * But this code might not work for complex native setup, for simple cases, might work
@@ -189,5 +192,14 @@ RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subje
 {
     return dispatch_get_main_queue();
 }
+
+// Don't compile this code when we build for the old architecture.
+#ifdef RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+(const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeRnBugfenderSpecJSI>(params);
+}
+#endif
 
 @end
