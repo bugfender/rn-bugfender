@@ -67,6 +67,12 @@ export default function App() {
       </View>
       <View style={styles.button}>
         <Button
+          onPress={_sendLogConsoleStyle}
+          title="`console.*` compatible log entry"
+        />
+      </View>
+      <View style={styles.button}>
+        <Button
           onPress={_onPressShowUserFeedback}
           title="Show Native User Feedback"
         />
@@ -93,6 +99,16 @@ export default function App() {
     const min = date.getMinutes(); //Current Minutes
     const sec = date.getSeconds(); //Current Seconds
     throw new Error('Force crash' + 'Time: ' + hours + ':' + min + ':' + sec);
+  }
+
+  function _sendLogConsoleStyle(): void {
+    Bugfender.sendLog({
+      text: ['This is a console.* template: %s', 'value']
+    });
+
+    Bugfender.sendLog({
+      text: ['Just handles array of mixed values', true, 42, { foo: 'bar' }]
+    });
   }
 
   async function _onPressButton(): Promise<void> {

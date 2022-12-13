@@ -1,5 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
-import { BugfenderFacade, DeviceKeyValue, LogEntry, LogLevel, PrintToConsole, UserFeedbackResult, format } from '@bugfender/common';
+import { BugfenderFacade, DeviceKeyValue, LogEntry, LogLevel, PrintToConsole, UserFeedbackResult, format, formatLogEntryText } from '@bugfender/common';
 import type { ISDKOptions } from './types/sdk-options';
 import type { UserFeedbackOptions } from './user-feedback';
 import { DefaultUserFeedbackOptions } from './user-feedback';
@@ -278,7 +278,7 @@ class BugfenderClass implements BugfenderFacade {
       log.file ?? '',
       log.level ?? LogLevel.Debug,
       log.tag ?? '',
-      log.text ?? ''
+      formatLogEntryText(log.text ?? '')
     );
   }
 
