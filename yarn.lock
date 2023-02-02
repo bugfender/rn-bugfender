@@ -1103,10 +1103,10 @@
   dependencies:
     util "^0.12.5"
 
-"@bugfender/sdk@^2.1.0":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@bugfender/sdk/-/sdk-2.2.1.tgz#8c3ab4b90fadef0cda2b31a5d6a68c3582ef13c9"
-  integrity sha512-TBC4GssG3XdO/zNHNDtV/dAhWF7UD2Tosm9ygb1fe935Sq/q3NnDR4ZUvU0cgRFf8a2Zd7sNAcrppgYt3qph7g==
+"@bugfender/sdk@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@bugfender/sdk/-/sdk-2.2.2.tgz#785d79fc2dbb68b25cc5aae0832f61b770b64863"
+  integrity sha512-ZBjMElhth5hhzKqhrqRs0ahVMzhFgol2VxwOcFweYYn26QiGTeRl9sunwSVn0rGpgBKQxKLRHDIa9TXDlDeH4g==
   dependencies:
     "@bugfender/common" "^1.1.2"
     base-58 "0.0.1"
@@ -2867,9 +2867,9 @@ braces@^3.0.2:
     fill-range "^7.0.1"
 
 broadcast-channel@^4.19.1:
-  version "4.20.1"
-  resolved "https://registry.yarnpkg.com/broadcast-channel/-/broadcast-channel-4.20.1.tgz#1ccc40dceb1447378247f8263904e29f0c4cd974"
-  integrity sha512-ob5xyUEMWJRBOggwVGEZpKCXK/Pkfe3LkrokNTwgywhKXFNETRkD5IanLqmpY/roy7bqBsijb7lMEDyc1qlnHQ==
+  version "4.20.2"
+  resolved "https://registry.yarnpkg.com/broadcast-channel/-/broadcast-channel-4.20.2.tgz#34c639251dfc586da7c8c1d6b2418dafa9568ae0"
+  integrity sha512-v0lJgMzC+MX4e2KCFWYXChZ2mKTqm5mnJGId6tqJp3NfylggbNd8c2uKeP4MQxD2ucKOesY68aN98zwl9d6Tvg==
   dependencies:
     "@babel/runtime" "7.20.7"
     oblivious-set "1.1.1"

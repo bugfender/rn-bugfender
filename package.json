@@ -79,6 +79,7 @@
     "@types/react": "17.0.21"
   },
   "peerDependencies": {
+    "@bugfender/sdk": "^2.2.2",
     "react": "*",
     "react-native": "*"
   },
@@ -157,7 +158,6 @@
     ]
   },
   "dependencies": {
-    "@bugfender/common": "^1.0.0",
-    "@bugfender/sdk": "^2.1.0"
+    "@bugfender/common": "^1.0.0"
   }
 }
