@@ -10,7 +10,7 @@ Bugfender module for React Native and React Native for the Web. It depends on th
 
 Add the bugfender plugin from npm
 
-`$ npm install @bugfender/rn-bugfender --save`
+`$ npm install --save @bugfender/rn-bugfender @bugfender/sdk @bugfender/common`
 
 ### Android & React Native for the Web
 You are done!
