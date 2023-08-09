@@ -10,7 +10,9 @@ export interface UserFeedbackOptions extends BaseUserFeebackOptions {
   closeLabel?: string;
 }
 
-export class DefaultUserFeedbackOptions implements Required<UserFeedbackOptions> {
+export class DefaultUserFeedbackOptions
+  implements Required<UserFeedbackOptions>
+{
   public title = 'Feedback';
   public hint = 'Please insert your feedback here and click send';
   public subjectPlaceholder = 'Subject…';

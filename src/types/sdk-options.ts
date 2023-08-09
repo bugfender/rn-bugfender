@@ -1,4 +1,4 @@
-import {removeUndefinedProperties} from '@bugfender/common';
+import { removeUndefinedProperties } from '@bugfender/common';
 
 export interface ISDKCommonOptions {
   /** The app key to log into */
@@ -35,7 +35,9 @@ export interface ISDKNativeOptions {
   enableLogcatLogging?: boolean;
 }
 
-export type ISDKOptions = ISDKCommonOptions & ISDKNativeOptions & ISDKWebOptions;
+export type ISDKOptions = ISDKCommonOptions &
+  ISDKNativeOptions &
+  ISDKWebOptions;
 
 export class SDKOptionsBuilder {
   private commonOptions: ISDKCommonOptions;

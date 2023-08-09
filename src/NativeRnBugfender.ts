@@ -1,6 +1,6 @@
-import type {TurboModule} from 'react-native/Libraries/TurboModule/RCTExport';
-import {TurboModuleRegistry} from 'react-native';
-import type {Float,Int32} from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
+import { TurboModuleRegistry } from 'react-native';
+import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export interface Spec extends TurboModule {
   activateLogger(key: string): void;
@@ -25,7 +25,14 @@ export interface Spec extends TurboModule {
   debug(tag: string, text: string): void;
   warning(tag: string, text: string): void;
   error(tag: string, text: string): void;
-  log(lineNumber: Int32, method: string, file: string, logLevel: Int32, tag: string, message: string): void;
+  log(
+    lineNumber: Int32,
+    method: string,
+    file: string,
+    logLevel: Int32,
+    tag: string,
+    message: string
+  ): void;
   sendIssue(tag: string, text: string): Promise<string>;
   sendCrash(tag: string, text: string): Promise<string>;
   forceSendOnce(): void;
@@ -33,6 +40,4 @@ export interface Spec extends TurboModule {
   showUserFeedback(title: string, text: string): Promise<string>;
 }
 
-export default TurboModuleRegistry.get<Spec>(
-  'RnBugfender',
-) as Spec | null;
+export default TurboModuleRegistry.get<Spec>('RnBugfender') as Spec | null;

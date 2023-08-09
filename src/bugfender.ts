@@ -1,5 +1,14 @@
 import { NativeModules, Platform } from 'react-native';
-import { BugfenderFacade, DeviceKeyValue, LogEntry, LogLevel, PrintToConsole, UserFeedbackResult, format, formatLogEntryText } from '@bugfender/common';
+import {
+  BugfenderFacade,
+  DeviceKeyValue,
+  LogEntry,
+  LogLevel,
+  PrintToConsole,
+  UserFeedbackResult,
+  format,
+  formatLogEntryText,
+} from '@bugfender/common';
 import type { ISDKOptions } from './types/sdk-options';
 import type { UserFeedbackOptions } from './user-feedback';
 import { DefaultUserFeedbackOptions } from './user-feedback';
@@ -14,13 +23,13 @@ const LINKING_ERROR =
 const RnBugfender = NativeModules.RnBugfender
   ? NativeModules.RnBugfender
   : new Proxy(
-    {},
-    {
-      get() {
-        throw new Error(LINKING_ERROR);
-      },
-    }
-  );
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      }
+    );
 
 class BugfenderClass implements BugfenderFacade {
   private overrideConsoleMethods =
@@ -48,7 +57,10 @@ class BugfenderClass implements BugfenderFacade {
       // region init
       Platform.OS === 'ios'
         ? RnBugfender.activateLogger(validatedOptions.appKey)
-        : RnBugfender.init(validatedOptions.appKey, validatedOptions.printToConsole ?? false);
+        : RnBugfender.init(
+            validatedOptions.appKey,
+            validatedOptions.printToConsole ?? false
+          );
 
       if (validatedOptions.overrideConsoleMethods) {
         this.overrideConsoleMethods.init();
@@ -140,18 +152,6 @@ class BugfenderClass implements BugfenderFacade {
     });
   }
 
-  /**
-   * @param obj A JavaScript value to output
-   * @param objs List of optional JavaScript values to output
-   */
-  public log(obj: unknown, ...objs: unknown[]): void;
-  /**
-   * String message with optional substitutions. This mimicks que the `window.console` template messages. [Learn more in MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#Using_string_substitutions).
-   *
-   * @param msg Message with optional `%` placeholders
-   * @param subst Optional substitutions list
-   */
-  public log(msg: string, ...subst: unknown[]): void;
   public log(...parameters: unknown[]): void {
     this.printToConsole.log(...parameters);
 
@@ -159,18 +159,6 @@ class BugfenderClass implements BugfenderFacade {
     RnBugfender.debug('', message);
   }
 
-  /**
-   * @param obj A JavaScript value to output
-   * @param objs List of optional JavaScript values to output
-   */
-  public warn(obj: unknown, ...objs: unknown[]): void;
-  /**
-   * String message with optional substitutions. This mimicks que the `window.console` template messages. [Learn more in MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#Using_string_substitutions).
-   *
-   * @param msg Message with optional `%` placeholders
-   * @param subst Optional substitutions list
-   */
-  public warn(msg: string, ...subst: unknown[]): void;
   public warn(...parameters: unknown[]): void {
     this.printToConsole.warn(...parameters);
 
@@ -178,18 +166,6 @@ class BugfenderClass implements BugfenderFacade {
     RnBugfender.warning('', message);
   }
 
-  /**
-   * @param obj A JavaScript value to output
-   * @param objs List of optional JavaScript values to output
-   */
-  public error(obj: unknown, ...objs: unknown[]): void;
-  /**
-   * String message with optional substitutions. This mimicks que the `window.console` template messages. [Learn more in MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#Using_string_substitutions).
-   *
-   * @param msg Message with optional `%` placeholders
-   * @param subst Optional substitutions list
-   */
-  public error(msg: string, ...subst: unknown[]): void;
   public error(...parameters: unknown[]): void {
     this.printToConsole.error(...parameters);
 
@@ -197,18 +173,6 @@ class BugfenderClass implements BugfenderFacade {
     RnBugfender.error('', message);
   }
 
-  /**
-   * @param obj A JavaScript value to output
-   * @param objs List of optional JavaScript values to output
-   */
-  public trace(obj: unknown, ...objs: unknown[]): void;
-  /**
-   * String message with optional substitutions. This mimicks que the `window.console` template messages. [Learn more in MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#Using_string_substitutions).
-   *
-   * @param msg Message with optional `%` placeholders
-   * @param subst Optional substitutions list
-   */
-  public trace(msg: string, ...subst: unknown[]): void;
   public trace(...parameters: unknown[]): void {
     this.printToConsole.trace(...parameters);
 
@@ -216,18 +180,6 @@ class BugfenderClass implements BugfenderFacade {
     RnBugfender.trace('', message);
   }
 
-  /**
-   * @param obj A JavaScript value to output
-   * @param objs List of optional JavaScript values to output
-   */
-  public info(obj: unknown, ...objs: unknown[]): void;
-  /**
-   * String message with optional substitutions. This mimicks que the `window.console` template messages. [Learn more in MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#Using_string_substitutions).
-   *
-   * @param msg Message with optional `%` placeholders
-   * @param subst Optional substitutions list
-   */
-  public info(msg: string, ...subst: unknown[]): void;
   public info(...parameters: unknown[]): void {
     this.printToConsole.info(...parameters);
 
@@ -235,18 +187,6 @@ class BugfenderClass implements BugfenderFacade {
     RnBugfender.info('', message);
   }
 
-  /**
-   * @param obj A JavaScript value to output
-   * @param objs List of optional JavaScript values to output
-   */
-  public fatal(obj: unknown, ...objs: unknown[]): void;
-  /**
-   * String message with optional substitutions. This mimicks que the `window.console` template messages. [Learn more in MDN](https://developer.mozilla.org/en-US/docs/Web/API/console#Using_string_substitutions).
-   *
-   * @param msg Message with optional `%` placeholders
-   * @param subst Optional substitutions list
-   */
-  public fatal(msg: string, ...subst: unknown[]): void;
   public fatal(...parameters: unknown[]): void {
     this.printToConsole.error(...parameters);
 
@@ -358,6 +298,4 @@ class BugfenderClass implements BugfenderFacade {
   }
 }
 
-export {
-  BugfenderClass, RnBugfender
-}
+export { BugfenderClass, RnBugfender };

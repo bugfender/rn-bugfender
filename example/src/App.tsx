@@ -1,10 +1,13 @@
 import * as React from 'react';
 
-import {Button, Linking, StyleSheet, Text, View} from 'react-native';
-import {Bugfender, LogLevel, SDKOptionsBuilder} from '@bugfender/rn-bugfender';
+import { Button, Linking, StyleSheet, Text, View } from 'react-native';
+import {
+  Bugfender,
+  LogLevel,
+  SDKOptionsBuilder,
+} from '@bugfender/rn-bugfender';
 
 export default function App() {
-
   // Add a "bugfenderKey.json" containing { "bugfenderKey : "YOUR_APP_KEY" }
   // Or delete this line and hardcode your key in Bugfender.init("YOUR_APP_KEY")
   const key = require('./bugfenderKey.json').bugfenderKey;
@@ -36,34 +39,29 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>
-        Welcome to RN Bugfender Example!
+      <Text style={styles.welcome}>Welcome to RN Bugfender Example!</Text>
+      <Text style={styles.instructions}>
+        This application sends directly logs to the server if you push "Send
+        Logs" button.
       </Text>
       <Text style={styles.instructions}>
-        This application sends directly logs to the server if you push "Send Logs" button.
+        Pressing "Generate JS Crash" the application will crash due to a
+        JavaScript error and the crash information will be sent to the server.
+        This won't work on debug builds as LogBox will capture the error.
       </Text>
       <Text style={styles.instructions}>
-        Pressing "Generate JS Crash" the application will crash due to a JavaScript error and the crash information
-        will be sent to the server. This won't work on debug builds as LogBox will capture the error.
-      </Text>
-      <Text style={styles.instructions}>
-        Pressing "Show Native User Feedback" a native screen for sending feedback will be shown.
+        Pressing "Show Native User Feedback" a native screen for sending
+        feedback will be shown.
       </Text>
       <Text style={styles.instructions}>
         Double tap R on your keyboard to reload,{'\n'}
         Shake or press menu button for dev menu
       </Text>
       <View style={styles.button}>
-        <Button
-          onPress={_onPressButton}
-          title="Send logs"
-        />
+        <Button onPress={_onPressButton} title="Send logs" />
       </View>
       <View style={styles.button}>
-        <Button
-          onPress={_generateError}
-          title="Generate JS crash"
-        />
+        <Button onPress={_generateError} title="Generate JS crash" />
       </View>
       <View style={styles.button}>
         <Button
@@ -78,16 +76,10 @@ export default function App() {
         />
       </View>
       <View style={styles.button}>
-        <Button
-          onPress={_openDeviceURL}
-          title="Open Device URL"
-        />
+        <Button onPress={_openDeviceURL} title="Open Device URL" />
       </View>
       <View style={styles.button}>
-        <Button
-          onPress={_openSessionURL}
-          title="Open Session URL"
-        />
+        <Button onPress={_openSessionURL} title="Open Session URL" />
       </View>
     </View>
   );
@@ -103,16 +95,15 @@ export default function App() {
 
   function _sendLogConsoleStyle(): void {
     Bugfender.sendLog({
-      text: ['This is a console.* template: %s', 'value']
+      text: ['This is a console.* template: %s', 'value'],
     });
 
     Bugfender.sendLog({
-      text: ['Just handles array of mixed values', true, 42, { foo: 'bar' }]
+      text: ['Just handles array of mixed values', true, 42, { foo: 'bar' }],
     });
   }
 
   async function _onPressButton(): Promise<void> {
-
     Bugfender.sendLog({
       level: LogLevel.Debug,
       tag: 'REACT',
@@ -207,11 +198,13 @@ export default function App() {
     Bugfender.sendCrash('Crash title', 'Crash text').then((url) =>
       console.log('Crash url: %s', url)
     );
-    Bugfender.sendUserFeedback('User feedback', 'User feedback message').then((url) =>
-      console.log('Feedback url: %s', url)
+    Bugfender.sendUserFeedback('User feedback', 'User feedback message').then(
+      (url) => console.log('Feedback url: %s', url)
     );
     Bugfender.getDeviceURL().then((url) => console.log('Device url: %s', url));
-    Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
+    Bugfender.getSessionURL().then((url) =>
+      console.log('Session url: %s', url)
+    );
 
     Bugfender.forceSendOnce();
 

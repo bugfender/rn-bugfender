@@ -1,19 +1,15 @@
-import {format} from '@bugfender/common';
-import {RnBugfender} from "./bugfender";
+import { format } from '@bugfender/common';
+import { RnBugfender } from './bugfender';
 
 /**
  * Overrides the `window.console` methods in order to execute the Bugfender equivalent logging
  * methods while keeping the original browser functionality.
  */
 export class OverrideConsoleMethods {
-  constructor(
-    protected window: Window,
-  ) {
-  }
+  constructor(protected window: Window) {}
 
   public init(): void {
-
-    (this.window as any).console = function (console: Console) {
+    (this.window as any).console = (function (console: Console) {
       return {
         ...console,
         log: function (...parameters: unknown[]) {
@@ -47,6 +43,6 @@ export class OverrideConsoleMethods {
           RnBugfender.error('', message);
         },
       };
-    }((this.window as any).console);
+    })((this.window as any).console);
   }
 }
