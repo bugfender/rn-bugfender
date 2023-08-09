@@ -2,66 +2,35 @@
 
 Bugfender module for React Native and React Native for the Web. It depends on the iOS, Android and Javascript Bugfender SDKs.
 
-## Adding Bugfender to your project
+This version has been tested in React Native with both the Old and New Architecture.
+The New Architecture is still experimental, and therefore subject to break in new React Native versions.
 
-**Please note:** if you're using Expo for development, be sure to be using the ["bare workflow"](https://docs.expo.io/introduction/managed-vs-bare/#bare-workflow).
+## Expo compatibility
+
+Bugfender works with Expo in the ["bare workflow"](https://docs.expo.io/introduction/managed-vs-bare/#bare-workflow). The Expo Go application (used in the managed workflow) can not run the Bugfender SDK because it contains native code.
+
+## Adding Bugfender to your project
 
 `$ cd path_to_your_project`
 
 Add the bugfender plugin from npm
 
-`$ npm install --save @bugfender/rn-bugfender @bugfender/sdk @bugfender/common`
+`$ npm install @bugfender/rn-bugfender @bugfender/sdk @bugfender/common`
 
-### Android & React Native for the Web
-You are done!
+After installing, close and relaunch your app with `npm run ios` or `npm run android`.
 
-### iOS
-You can finish the installation manually or via CocoaPods (recommended)
+## Usage
 
-**CocoaPods (recommended)**
-
-1. Ensure your iOS project contains a Podfile, otherwise you need to add it now:
-```
-$ cd path_to_your_project/ios
-$ pod init
-```
-Make sure you're targeting at least iOS platform version 10 (specify `platform :ios, '10.0'`).
-
-2. After configuring the podfile you can now go to the console and run
-
-`$ pod install`
-
-When the installation has finished you should be able to run your project in iOS and Android.
-
-**Remember that you should be using the Xcode workspace instead of the xcodeproj file from now on.**
-
-*At the end of this document you can find a **[recommended podfile](#recommended-podfile)**. You can use it as an example*.
-
-If you have any problems compiling or executing, try our [Troubleshooting section](#cocoapods-troubleshooting) at the end of this document.
-
-**Manual installation (alternative to CocoaPods)**
-
-Download the latest release from [Github](https://github.com/bugfender/BugfenderSDK-iOS/releases) and copy `BugfenderSDK.framework` to `YourAwesomeProjectDirectory/ios` (same directory as AwesomeProject.xcodeproj). Then, follow the instructions to setup your project manually:
-
-* Go to your **Project** > **Your Target** > **General** > **Linked Frameworks and Libraries** and drag `BugfenderSDK.framework` there (uncheck the "Copy items if needed" checkbox).
-
-* Make sure you have linked `SystemConfiguration.framework`, `Security.framework`, `MobileCoreServices.framework` and `libc++.tbd` as well.
-
-## Upgrading from version 1.x
-After updating to version 2.x from version 1.x you should perform the following extra steps:
-### Android
-Open `MainApplication` class inside `android/app/src/main/java/com.<your_app>/` folder and remove any references to `com.bugfender.react.RNBugfenderPackage`
-### iOS
-Open `Podfile` inside `ios` folder and remove the following line:
-```
-pod 'RNBugfender', :path => '../node_modules/@bugfender/rn-bugfender'
-```
-and then execute the following command under `ios` folder:
-```
-pod deintegrate && pod install
+```typescript
+import { Bugfender, LogLevel } from '@bugfender/rn-bugfender';
 ```
 
-## RNBugfender Usage
+Please check the following URL for a complete API reference: https://js.bugfender.com.
+
+Note: always import @bugfender/rn-bugfender instead of @bugfender/sdk. This will enable the native features of the SDK that you wouldn't get otherwise.
+
+### Example
+
 ```typescript
 import { Bugfender, LogLevel } from '@bugfender/rn-bugfender';
 
@@ -81,19 +50,6 @@ Bugfender.init({
   // build: '42', // Web specific
   // version: '1.0', // Web sprecific
 });
-
-// Alternatively, SDKOptionsBuilder can be used to make it apparent what options are specific of certain platforms
-Bugfender.init(
-  new SDKOptionsBuilder({
-    appKey: '<YOUR APP KEY>',
-  }).native({
-    enableLogcatLogging: false,
-  }).web({
-    logBrowserEvents: true,
-    build: '42',
-    version: '1.0',
-  }).build()
-);
 
 // Send logs with different levels
 Bugfender.log('This is a debug log in Bugfender from React Native');
@@ -161,6 +117,7 @@ Bugfender.getSessionURL().then((url) => console.log('Session url: %s', url));
 // Synchronizes all logs and issues with the server once
 Bugfender.forceSendOnce();
 ```
+
 ## Changelog
 The changelog of the Bugfender Web SDK can be found in ReleaseNotes under the [react-native](https://bugfender.releasenotes.io/tag/react-native) tag. For all the Bugfender product changes please visit the general release notes.
 
@@ -186,47 +143,18 @@ The React Native SDK API has changed in order be unified with [Bugfender Web SDK
 * `setDeviceKey` method replaces `setDeviceBoolean`, `setDeviceString`, `setDeviceInteger` & `setDeviceFloat`
 
 ## Cocoapods Troubleshooting
-We did our best to create a installation process that worked for most of the users. However, the React Native configuration can be tricky sometimes.
+We often get questions about CocoaPods install failing. Whilst this has nothing to do with Bugfender, you may
+encounter this problem while installing the pod.
 
-Most of the issues are related to the high number of dependencies and the compatibility between them. As every project is different and has different needs it's difficult to provide a magic receipt that can work out of the box, however we find out that the following Podfile compiles and run correctly most of the time. You can use it as a basis to experiment and find a configuration that works for you.
+To reinstall the pods, you can do:
 
-### Recommended Podfile
-```
-platform :ios, '10.0'
-
-target 'SampleProject' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for SampleProject
-  pod 'AFNetworking'
-
-  # Add new pods below this line
-  pod 'RnBugfender', :path => '../node_modules/@bugfender/rn-bugfender'
-
-  rn_path = '../node_modules/react-native'
-
-  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga"
-  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-  pod 'React', path: rn_path, subspecs: [
-    'Core',
-    'CxxBridge',
-    'DevSupport',
-    'RCTActionSheet',
-    'RCTAnimation',
-    'RCTGeolocation',
-    'RCTImage',
-    'RCTLinkingIOS',
-    'RCTNetwork',
-    'RCTSettings',
-    'RCTText',
-    'RCTVibration',
-    'RCTWebSocket',
-  ]
-
-end
+```sh
+bundle exec pod install
 ```
 
-If you are not able to get your project working you can still try to add RNBugfender with the Manual Installation or to open an issue in Github and maybe we can help you.
+Or, for the New Architecture:
+```sh
+RCT_NEW_ARCH_ENABLED=1 bundle exec pod install
+```
 
-Happy debugging!
+You can find more details here: https://reactnative.dev/docs/environment-setup
