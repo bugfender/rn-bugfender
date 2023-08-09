@@ -157,5 +157,13 @@
         }
       ]
     ]
+  },
+  "codegenConfig": {
+    "name": "RnBugfenderSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.bugfender.react"
+    }
   }
 }

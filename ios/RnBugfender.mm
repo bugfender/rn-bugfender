@@ -3,7 +3,7 @@
 #import <React/RCTUtils.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RNRnBugfenderSpec.h"
+#import <RnBugfenderSpec/RnBugfenderSpec.h>
 #endif
 
 @implementation RnBugfender
