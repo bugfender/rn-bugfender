@@ -54,14 +54,14 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@arkweid/lefthook": "^0.7.7",
-    "@babel/eslint-parser": "^7.19.1",
     "@commitlint/config-conventional": "^17.2.0",
+    "@evilmartians/lefthook": "^1.4.8",
     "@react-native-community/eslint-config": "^3.2.0",
-    "@release-it/conventional-changelog": "^5.1.1",
+    "@release-it/conventional-changelog": "^7.0.0",
     "@types/jest": "^29.2.2",
     "@types/react": "^18.2.19",
     "@types/react-native": "^0.72.2",
+    "@typescript-eslint/parser": "^5.62.0",
     "commitlint": "^17.2.0",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
@@ -72,8 +72,8 @@
     "react": "^18.2.0",
     "react-native": "^0.72.3",
     "react-native-builder-bob": "^0.21.3",
-    "release-it": "^15.5.0",
-    "typescript": "^4.8.4"
+    "release-it": "^16.1.4",
+    "typescript": "^4.9.5"
   },
   "resolutions": {
     "@types/react": "17.0.21"
@@ -83,6 +83,11 @@
     "@bugfender/sdk": "^2.2.2",
     "react": "*",
     "react-native": "*"
+  },
+  "overrides": {
+    "@release-it/conventional-changelog": {
+      "semver": "~7.5.2"
+    }
   },
   "jest": {
     "preset": "react-native",
