@@ -9,6 +9,18 @@
 @implementation RnBugfender
 RCT_EXPORT_MODULE()
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [Bugfender setSDKType:@"reactnative"];
+        });
+    }
+    return self;
+}
+
 RCT_EXPORT_METHOD(activateLogger:(NSString *)key)
 {
     NSLog(@"Activate logger with key %@",key);
