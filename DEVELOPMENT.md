@@ -89,11 +89,13 @@ If it does not work you can create a new updated library from scratch:
     implementation 'com.bugfender.sdk:android:3.+'
     ```
 
+   Make sure Gradle resolves at least 3.5.0, since the SDK type API is required.
+
 6. Copy `RnBugfenderModule.java` and `RnBufgenerPackage.java` to **android/src/main/java/com.bugfender.react**.
 7. Add the Bugfender dependency to the podspec on the **root** folder
 
     ```ruby
-    s.dependency 'BugfenderSDK', '~> 1.10.5'
+    s.dependency 'BugfenderSDK', '~> 2.1.0'
     ```
 
 8. Copy `RnBugefnder.h` && `RnBugefnder.mm` to **ios/**

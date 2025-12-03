@@ -16,13 +16,17 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @ReactModule(name = RnBugfenderModule.NAME)
 public class RnBugfenderModule extends ReactContextBaseJavaModule implements ActivityEventListener {
   public static final String NAME = "RnBugfender";
+  private static final String SDK_TYPE = "reactnative";
+  private static final AtomicBoolean sdkTypeSet = new AtomicBoolean(false);
 
   public RnBugfenderModule(ReactApplicationContext reactContext) {
     super(reactContext);
+    setSdkType();
     this.getReactApplicationContext().addActivityEventListener(this);
   }
 
@@ -206,6 +210,12 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
         return LogLevel.Error;
       default:
         return null;
+    }
+  }
+
+  private static void setSdkType() {
+    if (sdkTypeSet.compareAndSet(false, true)) {
+      Bugfender.setSDKType(SDK_TYPE);
     }
   }
 
