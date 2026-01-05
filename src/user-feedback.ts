@@ -4,8 +4,16 @@ import type { UserFeedbackOptions as BaseUserFeebackOptions } from '@bugfender/c
  * Options object for `Bugfender.getUserFeedback` with customised modal strings.
  */
 export interface UserFeedbackOptions extends BaseUserFeebackOptions {
+  /** Default `Feedback`. */
+  title?: string;
   /** Default `Please insert your feedback here and click send`. */
   hint?: string;
+  /** Default `Subject…`. */
+  subjectPlaceholder?: string;
+  /** Default `Your feedback…`. */
+  feedbackPlaceholder?: string;
+  /** Default `Send`. */
+  submitLabel?: string;
   /** Default: `Close`. This attribute is only used on iOS */
   closeLabel?: string;
 }

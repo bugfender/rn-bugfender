@@ -215,7 +215,7 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
 
   private static void setSdkType() {
     if (sdkTypeSet.compareAndSet(false, true)) {
-      Bugfender.setSDKType(SDK_TYPE);
+      Bugfender.setSDKType(SDK_TYPE, BuildConfig.SDK_VERSION);
     }
   }
 
