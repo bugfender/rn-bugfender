@@ -55,9 +55,11 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "devDependencies": {
+  "dependencies": {
     "@bugfender/common": "^1.4.0",
-    "@bugfender/sdk": "^2.4.0",
+    "@bugfender/sdk": "^2.4.0"
+  },
+  "devDependencies": {
     "@commitlint/config-conventional": "^17.2.0",
     "@evilmartians/lefthook": "^1.4.8",
     "@react-native-community/eslint-config": "^3.2.0",
