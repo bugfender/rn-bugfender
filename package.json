@@ -56,14 +56,14 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@bugfender/common": "^1.4.0",
-    "@bugfender/sdk": "^2.4.0"
+    "@bugfender/common": "^1.0.0",
+    "@bugfender/sdk": "^2.2.2"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.2.0",
     "@evilmartians/lefthook": "^1.4.8",
     "@react-native-community/eslint-config": "^3.2.0",
-    "@release-it/conventional-changelog": "^7.0.0",
+    "@release-it/conventional-changelog": "^7.0.2",
     "@types/jest": "^29.2.2",
     "@types/react": "^18.2.19",
     "@types/react-native": "^0.72.2",
@@ -117,13 +117,6 @@
     },
     "github": {
       "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "angular"
-        }
-      }
     }
   },
   "eslintConfig": {
