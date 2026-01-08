@@ -21,91 +21,87 @@ For iOS, install:
 
 **Once all the tooling is ready**:
 
-- On the `example` folder:
-  - `bundle install`: install required Ruby gems
 - On the root folder:
-  - `yarn`: this will install dependencies for the library & `/example`
-- Add Bugfender app key in `example` project:
-  - `cd example/src`
-  - `cp bugfenderKey.json.example bugfenderKey.json`
-  - Edit `bugfenderKey.json` & add the key
+  - `npm i`: this will install dependencies for the library
 
-## Running the example
+## Checking React Native Version Compatibility
 
-On a terminal window:
+Before upgrading, you should check if a newer React Native version is available and whether an upgrade is needed.
 
-- `cd example`: enter the `example` folder
-- `yarn start`: start React Native "server"
-- Open a new terminal to run the specific example
+### Quick Check
 
-For Android:
-
-- Open Android Studio and run an emulator
-- `cd example`: enter the `example` folder
-- `yarn android`: run in Android
-
-For iOS:
-
-- `cd example`: enter the `example` folder
-- `yarn ios`: run in iOS
-
-For Web:
-
-- Please use [this private project](https://bitbucket.org/bugfender/rn-bugfender-development) and execute `yarn web`
-
-## Upgrade React Native version
-
-Try with the official react native upgrade command:
+Run the automated version check script:
 
 ```bash
-npx react-native upgrade
+npm run check-rn-version
 ```
 
-If it does not work you can create a new updated library from scratch:
+or
 
-1. Using [create-react-native-library tool](https://reactnative.dev/docs/native-modules-setup)
-2. Be sure to select a Native library using Java & Objective-C
-3. Add the following lines to the `package.json` of the newly created library (be sure to use the latest version):
+```bash
+yarn check-rn-version
+```
 
-    ```json
-    "dependencies": {
-      "@bugfender/common": "1.0.0-alpha.5",
-      "@bugfender/sdk": "^2.1.0"
-    }
-    ```
+This script will:
+- Show your current React Native version (from `devDependencies`)
+- Check the latest available version on npm
+- Compare versions and indicate if an upgrade is available
+- Provide upgrade guidance and resources
 
-4. Add "dom" into the "lib" object on `tsconfig.json`:
+### When to Upgrade
 
-    ```json
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    ```
+Consider upgrading when:
+- A new major version is released (may include breaking changes)
+- A new minor version includes features you need
+- Security patches are released
+- You encounter bugs that are fixed in newer versions
+- You want to use new React Native features
 
-5. On **android/src/build.gradle** add the following to the dependencies:
+**Note**: This library uses `peerDependencies` with `"react-native": "*"`, meaning it should work with any React Native version. However, you should test thoroughly after upgrading.
 
-    ```gradle
-    implementation 'com.bugfender.sdk:android:3.+'
-    ```
 
-   Make sure Gradle resolves at least 3.5.0, since the SDK type API is required.
+## SDK Version Management
 
-6. Copy `RnBugfenderModule.java` and `RnBufgenerPackage.java` to **android/src/main/java/com.bugfender.react**.
-7. Add the Bugfender dependency to the podspec on the **root** folder
+The SDK version constant is shared between iOS and Android platforms to ensure consistency. The version is defined in a single source of truth.
 
-    ```ruby
-    s.dependency 'BugfenderSDK', '~> 2.1.0'
-    ```
+### Updating the SDK Version
 
-8. Copy `RnBugefnder.h` && `RnBugefnder.mm` to **ios/**
-9. Copy `App.tsx` & add `bugfenderKey.json` into **example/src/**, see `bugfenderKey.json` format below:
+The SDK version is stored in `sdk-version.json` at the root of the project:
 
-    ```json
-    {
-    "bugfenderKey": "<your Bugfdender key>"
-    }
-    ```
+```json
+{
+  "version": 20260105
+}
+```
 
-10. Run `pod install` under **example/ios/**
-11. You should be ready to run the example using `yarn android` & `yarn ios`
+The version uses a date-based format (YYYYMMDD), for example:
+- `20260105` = January 5, 2026
+- `20260215` = February 15, 2026
+
+### How It Works
+
+1. **Single Source of Truth**: The version is defined in `sdk-version.json`
+2. **Android**: The `build.gradle` file reads the JSON and creates a `BuildConfig.SDK_VERSION` field that is used in the Java code
+3. **iOS**: A script (`scripts/generate-sdk-version-header.js`) generates `ios/SDKVersion.h` from the JSON file
+4. **Automatic Generation**: The header file is automatically generated when you run `npm prepare` or `yarn prepare`
+
+### Manual Generation
+
+If you need to manually regenerate the iOS header file (for example, after editing `sdk-version.json`), run:
+
+```bash
+npm run generate-sdk-version
+```
+
+or
+
+```bash
+yarn generate-sdk-version
+```
+
+### Usage in Code
+
+- **Android**: The version is accessed via `BuildConfig.SDK_VERSION` in `RnBugfenderModule.java`
+- **iOS**: The version is accessed via the `SDK_VERSION` constant from `SDKVersion.h` in `RnBugfender.mm`
+
+**Note**: Do not edit `ios/SDKVersion.h` manually. It is auto-generated and will be overwritten. Always update `sdk-version.json` instead.

@@ -14,11 +14,18 @@ import type { UserFeedbackOptions } from './user-feedback';
 import { DefaultUserFeedbackOptions } from './user-feedback';
 import { SDKOptions } from './sdk-options';
 
-const LINKING_ERROR =
-  `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo managed workflow\n';
+const getLinkingError = (): string => {
+  const platformMessage = Platform.select({
+    ios: "- You have run 'pod install'\n",
+    default: '',
+  });
+  return (
+    `The package '@bugfender/rn-bugfender' doesn't seem to be linked. Make sure: \n\n` +
+    platformMessage +
+    '- You rebuilt the app after installing the package\n' +
+    '- You are not using Expo managed workflow\n'
+  );
+};
 
 const RnBugfender = NativeModules.RnBugfender
   ? NativeModules.RnBugfender
@@ -26,7 +33,7 @@ const RnBugfender = NativeModules.RnBugfender
       {},
       {
         get() {
-          throw new Error(LINKING_ERROR);
+          throw new Error(getLinkingError());
         },
       }
     );

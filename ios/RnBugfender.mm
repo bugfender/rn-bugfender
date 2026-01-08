@@ -6,6 +6,8 @@
 #import "RnBugfenderSpec.h"
 #endif
 
+#import "SDKVersion.h"
+
 @implementation RnBugfender
 RCT_EXPORT_MODULE()
 
@@ -15,7 +17,7 @@ RCT_EXPORT_MODULE()
     if (self) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [Bugfender setSDKType:@"reactnative"];
+            [Bugfender setSDKType:@"reactnative" version:SDK_VERSION];
         });
     }
     return self;

@@ -1,6 +1,6 @@
 {
   "name": "@bugfender/rn-bugfender",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "React Native bindings for Bugfender SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -26,7 +26,9 @@
     "test": "jest",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
+    "generate-sdk-version": "node scripts/generate-sdk-version-header.js",
+    "check-rn-version": "node scripts/check-rn-version.js",
+    "prepare": "npm run generate-sdk-version && bob build",
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn && yarn example pods"
@@ -52,6 +54,10 @@
   "homepage": "https://github.com/bugfender/rn-bugfender.git#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@bugfender/common": "^1.4.0",
+    "@bugfender/sdk": "^2.4.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.2.0",
