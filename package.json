@@ -78,7 +78,7 @@
     "react": "^18.2.0",
     "react-native": "^0.76.5",
     "react-native-builder-bob": "^0.21.3",
-    "release-it": "^16.1.4",
+    "release-it": "^16.3.0",
     "typescript": "^4.9.5"
   },
   "resolutions": {
@@ -120,7 +120,9 @@
     },
     "plugins": {
       "@release-it/conventional-changelog": {
-        "preset": "angular"
+        "preset": {
+          "name": "angular"
+        }
       }
     }
   },
