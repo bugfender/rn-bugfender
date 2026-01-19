@@ -6,6 +6,6 @@
 #ifndef SDK_VERSION_H
 #define SDK_VERSION_H
 
-static const int SDK_VERSION = 20260105;
+static const int SDK_VERSION = 20260119;
 
 #endif /* SDK_VERSION_H */
