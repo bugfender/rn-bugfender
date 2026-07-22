@@ -12,6 +12,9 @@ export class SDKOptions {
     logUIEvents: ['boolean'],
     registerErrorHandler: ['boolean'],
     version: ['string'],
+    networkLoggingEnabled: ['boolean'],
+    networkLoggingCaptureBodies: ['boolean'],
+    networkLoggingCaptureErrorResponseBodies: ['boolean'],
   };
 
   public init(options: ISDKOptions): ISDKOptions {
@@ -29,6 +32,9 @@ export class SDKOptions {
       registerErrorHandler: true,
       enableLogcatLogging: false,
       maximumLocalStorageSize: 5 * 1024 * 1024,
+      networkLoggingEnabled: false,
+      networkLoggingCaptureBodies: false,
+      networkLoggingCaptureErrorResponseBodies: false,
       ...options,
     };
   }

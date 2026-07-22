@@ -17,6 +17,12 @@ export interface ISDKCommonOptions {
   registerErrorHandler?: boolean;
   /** Sets the name for the device. If the Device Name is not set, then the platform standard device name will be automatically sent */
   deviceName?: string;
+  /** Enable network request/response capture. Defaults to `false`. */
+  networkLoggingEnabled?: boolean;
+  /** Capture request/response bodies when network logging is enabled. Defaults to `false`. */
+  networkLoggingCaptureBodies?: boolean;
+  /** Capture response bodies only for HTTP status >= 400 when full body capture is off. Defaults to `false`. */
+  networkLoggingCaptureErrorResponseBodies?: boolean;
 }
 
 export interface ISDKWebOptions {
@@ -73,6 +79,10 @@ export class SDKOptionsBuilder {
       version: this.webOptions?.version,
       enableLogcatLogging: this.nativeOptions?.enableLogcatLogging,
       maximumLocalStorageSize: this.nativeOptions?.maximumLocalStorageSize,
+      networkLoggingEnabled: this.commonOptions.networkLoggingEnabled,
+      networkLoggingCaptureBodies: this.commonOptions.networkLoggingCaptureBodies,
+      networkLoggingCaptureErrorResponseBodies:
+        this.commonOptions.networkLoggingCaptureErrorResponseBodies,
     };
 
     removeUndefinedProperties(options);

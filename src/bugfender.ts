@@ -89,6 +89,15 @@ class BugfenderClass implements BugfenderFacade {
       RnBugfender.setMaximumLocalStorageSize(
         validatedOptions.maximumLocalStorageSize
       );
+      if (validatedOptions.networkLoggingEnabled) {
+        RnBugfender.setNetworkLoggingEnabled(true);
+      }
+      if (validatedOptions.networkLoggingCaptureBodies) {
+        RnBugfender.setNetworkLoggingCaptureBodies(true);
+      }
+      if (validatedOptions.networkLoggingCaptureErrorResponseBodies) {
+        RnBugfender.setNetworkLoggingCaptureErrorResponseBodies(true);
+      }
       // endregion after init
 
       this.initialized = true;
@@ -302,6 +311,62 @@ class BugfenderClass implements BugfenderFacade {
   public setForceEnabled(enabled: boolean): void {
     this.printToConsole.info(`Set force enabled set to ${enabled}`);
     RnBugfender.setForceEnabled(enabled);
+  }
+
+  /**
+   * Enable or disable network request/response capture. Defaults to `false`.
+   *
+   * Captured entries are sent as logs tagged `bf_network`.
+   * On iOS, URLSession traffic (including React Native `fetch`) is captured.
+   * On Android, React Native `fetch` is instrumented via OkHttp.
+   * On web, this package re-exports `@bugfender/sdk`, which intercepts `fetch` / `XMLHttpRequest`.
+   */
+  public setNetworkLoggingEnabled(enabled: boolean): void {
+    this.printToConsole.info(`Set network logging enabled: ${enabled}`);
+    RnBugfender.setNetworkLoggingEnabled(enabled);
+  }
+
+  /**
+   * Capture request and response bodies (full mode). Defaults to `false`.
+   */
+  public setNetworkLoggingCaptureBodies(capture: boolean): void {
+    this.printToConsole.info(`Set network logging capture bodies: ${capture}`);
+    RnBugfender.setNetworkLoggingCaptureBodies(capture);
+  }
+
+  /**
+   * Capture response bodies only for HTTP status codes >= 400 when full body
+   * capture is disabled. Defaults to `false`.
+   */
+  public setNetworkLoggingCaptureErrorResponseBodies(capture: boolean): void {
+    this.printToConsole.info(
+      `Set network logging capture error response bodies: ${capture}`
+    );
+    RnBugfender.setNetworkLoggingCaptureErrorResponseBodies(capture);
+  }
+
+  /**
+   * Filter which URLs are captured. Patterns support plain substrings and
+   * wildcards (for example, `https://*.example.com/*`). Pass `null` for either
+   * list to leave that filter unset.
+   */
+  public setNetworkLoggingURLFilter(
+    allowlist: string[] | null,
+    denylist: string[] | null
+  ): void {
+    this.printToConsole.info('Set network logging URL filter');
+    RnBugfender.setNetworkLoggingURLFilter(allowlist, denylist);
+  }
+
+  /**
+   * Limit how many network logs are captured per calendar minute.
+   * Pass `null` to disable the limit.
+   */
+  public setNetworkLoggingMaxRequestsPerMinute(count: number | null): void {
+    this.printToConsole.info(
+      `Set network logging max requests per minute: ${count}`
+    );
+    RnBugfender.setNetworkLoggingMaxRequestsPerMinute(count);
   }
 }
 

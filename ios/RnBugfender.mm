@@ -202,6 +202,41 @@ RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subje
      */
 }
 
+RCT_EXPORT_METHOD(setNetworkLoggingEnabled:(BOOL)enabled)
+{
+    if ([Bugfender respondsToSelector:@selector(setNetworkLoggingEnabled:)]) {
+        [Bugfender setNetworkLoggingEnabled:enabled];
+    }
+}
+
+RCT_EXPORT_METHOD(setNetworkLoggingCaptureBodies:(BOOL)capture)
+{
+    if ([Bugfender respondsToSelector:@selector(setNetworkLoggingCaptureBodies:)]) {
+        [Bugfender setNetworkLoggingCaptureBodies:capture];
+    }
+}
+
+RCT_EXPORT_METHOD(setNetworkLoggingCaptureErrorResponseBodies:(BOOL)capture)
+{
+    if ([Bugfender respondsToSelector:@selector(setNetworkLoggingCaptureErrorResponseBodies:)]) {
+        [Bugfender setNetworkLoggingCaptureErrorResponseBodies:capture];
+    }
+}
+
+RCT_EXPORT_METHOD(setNetworkLoggingURLFilter:(NSArray *)allowlist denylist:(NSArray *)denylist)
+{
+    if ([Bugfender respondsToSelector:@selector(setNetworkLoggingURLFilterWithAllowlist:denylist:)]) {
+        [Bugfender setNetworkLoggingURLFilterWithAllowlist:allowlist denylist:denylist];
+    }
+}
+
+RCT_EXPORT_METHOD(setNetworkLoggingMaxRequestsPerMinute:(NSNumber *)count)
+{
+    if ([Bugfender respondsToSelector:@selector(setNetworkLoggingMaxRequestsPerMinute:)]) {
+        [Bugfender setNetworkLoggingMaxRequestsPerMinute:count];
+    }
+}
+
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();

@@ -131,7 +131,9 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   //noinspection GradleDynamicVersion
-  implementation 'com.bugfender.sdk:android:3.+'
+  implementation 'com.bugfender.sdk:android:4.+'
+  //noinspection GradleDynamicVersion
+  implementation 'com.bugfender.sdk:android-okhttp:4.+'
 }
 
 if (isNewArchitectureEnabled()) {

@@ -8,21 +8,31 @@ import android.content.Intent;
 import com.bugfender.sdk.Bugfender;
 import com.bugfender.sdk.LogLevel;
 import com.bugfender.sdk.ui.FeedbackActivity;
+import com.bugfender.sdk.BugfenderOkHttpInterceptor;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.modules.network.OkHttpClientFactory;
+import com.facebook.react.modules.network.OkHttpClientProvider;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 
 @ReactModule(name = RnBugfenderModule.NAME)
 public class RnBugfenderModule extends ReactContextBaseJavaModule implements ActivityEventListener {
   public static final String NAME = "RnBugfender";
   private static final String SDK_TYPE = "reactnative";
   private static final AtomicBoolean sdkTypeSet = new AtomicBoolean(false);
+  private static final AtomicBoolean okHttpInstrumented = new AtomicBoolean(false);
 
   public RnBugfenderModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -45,6 +55,7 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
 
   @ReactMethod
   public void init(String apiKey, boolean debug) {
+    ensureReactNativeOkHttpInstrumentation();
     Bugfender.init(getReactApplicationContext(), apiKey, debug);
   }
 
@@ -188,6 +199,76 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
       Bugfender.getUserFeedbackActivityIntent(getApplication(), title, hint, subjectHint, messageHint, sendButtonText), SHOW_USER_FEEDBACK_REQUEST_CODE
     );
     pendingPromise = promise;
+  }
+
+
+  @ReactMethod
+  public void setNetworkLoggingEnabled(boolean enabled) {
+    Bugfender.setNetworkLoggingEnabled(enabled);
+  }
+
+  @ReactMethod
+  public void setNetworkLoggingCaptureBodies(boolean capture) {
+    Bugfender.setNetworkLoggingCaptureBodies(capture);
+  }
+
+  @ReactMethod
+  public void setNetworkLoggingCaptureErrorResponseBodies(boolean capture) {
+    Bugfender.setNetworkLoggingCaptureErrorResponseBodies(capture);
+  }
+
+  @ReactMethod
+  public void setNetworkLoggingURLFilter(ReadableArray allowlist, ReadableArray denylist) {
+    Bugfender.setNetworkLoggingURLFilter(toStringList(allowlist), toStringList(denylist));
+  }
+
+  @ReactMethod
+  public void setNetworkLoggingMaxRequestsPerMinute(Integer count) {
+    Bugfender.setNetworkLoggingMaxRequestsPerMinute(count);
+  }
+
+  private static List<String> toStringList(ReadableArray array) {
+    if (array == null) {
+      return null;
+    }
+    List<String> list = new ArrayList<>(array.size());
+    for (int i = 0; i < array.size(); i++) {
+      if (!array.isNull(i)) {
+        list.add(array.getString(i));
+      }
+    }
+    return list;
+  }
+
+  /**
+   * React Native uses OkHttp for fetch/XHR. Register Bugfender's interceptor on the
+   * shared OkHttpClient so network logging and correlation headers work for JS traffic.
+   */
+  private void ensureReactNativeOkHttpInstrumentation() {
+    if (!okHttpInstrumented.compareAndSet(false, true)) {
+      return;
+    }
+    try {
+      OkHttpClientProvider.setOkHttpClientFactory(new OkHttpClientFactory() {
+        @Override
+        public OkHttpClient createNewNetworkModuleClient() {
+          OkHttpClient.Builder builder = OkHttpClientProvider.createClientBuilder();
+          boolean alreadyPresent = false;
+          for (Interceptor interceptor : builder.interceptors()) {
+            if (interceptor instanceof BugfenderOkHttpInterceptor) {
+              alreadyPresent = true;
+              break;
+            }
+          }
+          if (!alreadyPresent) {
+            builder.addInterceptor(new BugfenderOkHttpInterceptor());
+          }
+          return builder.build();
+        }
+      });
+    } catch (Throwable ignored) {
+      // OkHttp / RN networking may be unavailable in some environments.
+    }
   }
 
   private Application getApplication() {

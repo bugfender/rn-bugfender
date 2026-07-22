@@ -1,6 +1,6 @@
 {
   "name": "@bugfender/rn-bugfender",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "React Native bindings for Bugfender SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@bugfender/common": "^1.0.0",
-    "@bugfender/sdk": "^2.2.2"
+    "@bugfender/sdk": "^4.0.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.2.0",
@@ -87,7 +87,7 @@
   },
   "peerDependencies": {
     "@bugfender/common": "^1.0.0",
-    "@bugfender/sdk": "^2.2.2",
+    "@bugfender/sdk": "^4.0.0",
     "react": "*",
     "react-native": "*"
   },
