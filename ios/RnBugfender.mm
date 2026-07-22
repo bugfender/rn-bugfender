@@ -8,19 +8,45 @@
 
 #import "SDKVersion.h"
 
+static NSString *const kBugfenderObfuscateNetworkRequest = @"BugfenderObfuscateNetworkRequest";
+static NSString *const kBugfenderObfuscateNetworkResponse = @"BugfenderObfuscateNetworkResponse";
+
+@interface BFPendingObfuscation : NSObject
+@property (nonatomic) dispatch_semaphore_t semaphore;
+@property (nonatomic, strong) NSDictionary *response;
+@end
+
+@implementation BFPendingObfuscation
+@end
+
+@interface RnBugfender ()
+@property (nonatomic, strong) NSMutableDictionary<NSString *, BFPendingObfuscation *> *pendingObfuscations;
+@end
+
 @implementation RnBugfender
 RCT_EXPORT_MODULE()
+
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
+        _pendingObfuscations = [NSMutableDictionary dictionary];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             [Bugfender setSDKType:@"reactnative" version:SDK_VERSION];
         });
     }
     return self;
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+    return @[kBugfenderObfuscateNetworkRequest, kBugfenderObfuscateNetworkResponse];
 }
 
 RCT_EXPORT_METHOD(activateLogger:(NSString *)key)
@@ -194,12 +220,6 @@ RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subje
     
     UIViewController* vc = RCTPresentedViewController();
     [vc presentViewController:controller animated:YES completion:nil];
-    
-    /*
-     * Another option might be using the window.
-     * But this code might not work for complex native setup, for simple cases, might work
-     * [UIApplication.sharedApplication.delegate.window.rootViewController presentViewController:controller animated:YES completion:nil];
-     */
 }
 
 RCT_EXPORT_METHOD(setNetworkLoggingEnabled:(BOOL)enabled)
@@ -235,6 +255,156 @@ RCT_EXPORT_METHOD(setNetworkLoggingMaxRequestsPerMinute:(NSNumber *)count)
     if ([Bugfender respondsToSelector:@selector(setNetworkLoggingMaxRequestsPerMinute:)]) {
         [Bugfender setNetworkLoggingMaxRequestsPerMinute:count];
     }
+}
+
+RCT_EXPORT_METHOD(setNetworkLoggingRequestObfuscationHandlerEnabled:(BOOL)enabled)
+{
+    if (![Bugfender respondsToSelector:@selector(setNetworkLoggingRequestObfuscationHandler:)]) {
+        return;
+    }
+    if (enabled) {
+        [self installRequestObfuscationHandler];
+    } else {
+        [Bugfender setNetworkLoggingRequestObfuscationHandler:nil];
+    }
+}
+
+RCT_EXPORT_METHOD(setNetworkLoggingResponseObfuscationHandlerEnabled:(BOOL)enabled)
+{
+    if (![Bugfender respondsToSelector:@selector(setNetworkLoggingResponseObfuscationHandler:)]) {
+        return;
+    }
+    if (enabled) {
+        [self installResponseObfuscationHandler];
+    } else {
+        [Bugfender setNetworkLoggingResponseObfuscationHandler:nil];
+    }
+}
+
+RCT_EXPORT_METHOD(completeNetworkObfuscation:(NSString *)requestId result:(NSDictionary *)result)
+{
+    if (requestId.length == 0) {
+        return;
+    }
+    BFPendingObfuscation *pending = nil;
+    @synchronized (self.pendingObfuscations) {
+        pending = self.pendingObfuscations[requestId];
+    }
+    if (pending == nil) {
+        return;
+    }
+    pending.response = [result isKindOfClass:[NSDictionary class]] ? result : nil;
+    dispatch_semaphore_signal(pending.semaphore);
+}
+
+- (NSDictionary *)invokeJSObfuscation:(NSString *)eventName arguments:(NSDictionary *)arguments
+{
+    // Avoid deadlocking the platform/UI thread while waiting for JS.
+    if ([NSThread isMainThread]) {
+        return nil;
+    }
+
+    NSString *requestId = [[NSUUID UUID] UUIDString];
+    BFPendingObfuscation *pending = [[BFPendingObfuscation alloc] init];
+    pending.semaphore = dispatch_semaphore_create(0);
+
+    @synchronized (self.pendingObfuscations) {
+        self.pendingObfuscations[requestId] = pending;
+    }
+
+    NSMutableDictionary *payload = [NSMutableDictionary dictionaryWithDictionary:arguments ?: @{}];
+    payload[@"requestId"] = requestId;
+
+    __weak RnBugfender *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RnBugfender *strongSelf = weakSelf;
+        if (strongSelf != nil) {
+            [strongSelf sendEventWithName:eventName body:payload];
+        }
+    });
+
+    long waitResult = dispatch_semaphore_wait(pending.semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)));
+
+    @synchronized (self.pendingObfuscations) {
+        [self.pendingObfuscations removeObjectForKey:requestId];
+    }
+
+    if (waitResult != 0) {
+        return nil;
+    }
+    return pending.response;
+}
+
+- (NSDictionary<NSString *, NSString *> *)stringMapFrom:(id)value
+{
+    NSMutableDictionary<NSString *, NSString *> *mapped = [NSMutableDictionary dictionary];
+    if (![value isKindOfClass:[NSDictionary class]]) {
+        return mapped;
+    }
+    NSDictionary *raw = (NSDictionary *)value;
+    for (id key in raw) {
+        id entry = raw[key];
+        mapped[[key description]] = entry == [NSNull null] || entry == nil ? @"" : [entry description];
+    }
+    return mapped;
+}
+
+- (void)installRequestObfuscationHandler
+{
+    __weak RnBugfender *weakSelf = self;
+    [Bugfender setNetworkLoggingRequestObfuscationHandler:^BFNetworkRequestData * _Nonnull(NSString * _Nonnull url, NSDictionary<NSString *,NSString *> * _Nonnull headers, NSString * _Nullable body) {
+        RnBugfender *strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return [[BFNetworkRequestData alloc] initWithURL:url headers:headers body:body];
+        }
+
+        NSDictionary *response = [strongSelf invokeJSObfuscation:kBugfenderObfuscateNetworkRequest
+                                                       arguments:@{
+            @"url": url ?: @"",
+            @"headers": headers ?: @{},
+            @"body": body ?: [NSNull null],
+        }];
+        if (response == nil) {
+            return [[BFNetworkRequestData alloc] initWithURL:url headers:headers body:body];
+        }
+
+        NSString *obfuscatedUrl = [response[@"url"] isKindOfClass:[NSString class]] ? response[@"url"] : url;
+        NSDictionary<NSString *, NSString *> *obfuscatedHeaders = [strongSelf stringMapFrom:response[@"headers"]];
+        NSString *obfuscatedBody = nil;
+        if ([response[@"body"] isKindOfClass:[NSString class]]) {
+            obfuscatedBody = response[@"body"];
+        } else if (response[@"body"] == [NSNull null] || response[@"body"] == nil) {
+            obfuscatedBody = nil;
+        }
+        return [[BFNetworkRequestData alloc] initWithURL:obfuscatedUrl headers:obfuscatedHeaders body:obfuscatedBody];
+    }];
+}
+
+- (void)installResponseObfuscationHandler
+{
+    __weak RnBugfender *weakSelf = self;
+    [Bugfender setNetworkLoggingResponseObfuscationHandler:^BFNetworkResponseData * _Nonnull(NSDictionary<NSString *,NSString *> * _Nonnull headers, NSString * _Nullable body) {
+        RnBugfender *strongSelf = weakSelf;
+        if (strongSelf == nil) {
+            return [[BFNetworkResponseData alloc] initWithHeaders:headers body:body];
+        }
+
+        NSDictionary *response = [strongSelf invokeJSObfuscation:kBugfenderObfuscateNetworkResponse
+                                                       arguments:@{
+            @"headers": headers ?: @{},
+            @"body": body ?: [NSNull null],
+        }];
+        if (response == nil) {
+            return [[BFNetworkResponseData alloc] initWithHeaders:headers body:body];
+        }
+
+        NSDictionary<NSString *, NSString *> *obfuscatedHeaders = [strongSelf stringMapFrom:response[@"headers"]];
+        NSString *obfuscatedBody = nil;
+        if ([response[@"body"] isKindOfClass:[NSString class]]) {
+            obfuscatedBody = response[@"body"];
+        }
+        return [[BFNetworkResponseData alloc] initWithHeaders:obfuscatedHeaders body:obfuscatedBody];
+    }];
 }
 
 - (dispatch_queue_t)methodQueue

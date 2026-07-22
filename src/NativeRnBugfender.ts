@@ -46,6 +46,11 @@ export interface Spec extends TurboModule {
     denylist: ReadonlyArray<string> | null
   ): void;
   setNetworkLoggingMaxRequestsPerMinute(count: Int32 | null): void;
+  setNetworkLoggingRequestObfuscationHandlerEnabled(enabled: boolean): void;
+  setNetworkLoggingResponseObfuscationHandlerEnabled(enabled: boolean): void;
+  completeNetworkObfuscation(requestId: string, result: Object): void;
+  addListener(eventName: string): void;
+  removeListeners(count: Int32): void;
 }
 
 export default TurboModuleRegistry.get<Spec>('RnBugfender') as Spec | null;

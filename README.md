@@ -69,6 +69,17 @@ Bugfender.setNetworkLoggingURLFilter(
   ['*/secrets/*']
 );
 Bugfender.setNetworkLoggingMaxRequestsPerMinute(60);
+
+// Optional: redact sensitive headers/bodies before they are logged
+Bugfender.setNetworkLoggingRequestObfuscationHandler((url, headers, body) => ({
+  url,
+  headers: { ...headers, authorization: '[REDACTED]' },
+  body,
+}));
+Bugfender.setNetworkLoggingResponseObfuscationHandler((headers, body) => ({
+  headers,
+  body: body ? body.replace(/"token":"[^"]*"/g, '"token":"[REDACTED]"') : null,
+}));
 ```
 
 You can also enable it at init time with `networkLoggingEnabled`, `networkLoggingCaptureBodies`, and `networkLoggingCaptureErrorResponseBodies`.

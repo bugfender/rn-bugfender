@@ -1,28 +1,48 @@
 package com.bugfender.react;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import com.bugfender.sdk.Bugfender;
 import com.bugfender.sdk.LogLevel;
+import com.bugfender.sdk.NetworkLoggingRequestObfuscationHandler;
+import com.bugfender.sdk.NetworkLoggingResponseObfuscationHandler;
+import com.bugfender.sdk.NetworkRequestData;
+import com.bugfender.sdk.NetworkResponseData;
 import com.bugfender.sdk.ui.FeedbackActivity;
 import com.bugfender.sdk.BugfenderOkHttpInterceptor;
 import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.network.OkHttpClientFactory;
 import com.facebook.react.modules.network.OkHttpClientProvider;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -31,13 +51,32 @@ import okhttp3.OkHttpClient;
 public class RnBugfenderModule extends ReactContextBaseJavaModule implements ActivityEventListener {
   public static final String NAME = "RnBugfender";
   private static final String SDK_TYPE = "reactnative";
+  private static final String OBFUSCATE_REQUEST_EVENT = "BugfenderObfuscateNetworkRequest";
+  private static final String OBFUSCATE_RESPONSE_EVENT = "BugfenderObfuscateNetworkResponse";
   private static final AtomicBoolean sdkTypeSet = new AtomicBoolean(false);
   private static final AtomicBoolean okHttpInstrumented = new AtomicBoolean(false);
+
+  private static class PendingObfuscation {
+    final CountDownLatch latch = new CountDownLatch(1);
+    final AtomicReference<ReadableMap> result = new AtomicReference<>();
+  }
+
+  private final ConcurrentHashMap<String, PendingObfuscation> pendingObfuscations =
+    new ConcurrentHashMap<>();
 
   public RnBugfenderModule(ReactApplicationContext reactContext) {
     super(reactContext);
     setSdkType();
     this.getReactApplicationContext().addActivityEventListener(this);
+  }
+
+  // Required for NativeEventEmitter
+  @ReactMethod
+  public void addListener(String eventName) {
+  }
+
+  @ReactMethod
+  public void removeListeners(Integer count) {
   }
 
   @Override
@@ -225,6 +264,180 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
   @ReactMethod
   public void setNetworkLoggingMaxRequestsPerMinute(Integer count) {
     Bugfender.setNetworkLoggingMaxRequestsPerMinute(count);
+  }
+
+  @ReactMethod
+  public void setNetworkLoggingRequestObfuscationHandlerEnabled(boolean enabled) {
+    if (enabled) {
+      Bugfender.setNetworkLoggingRequestObfuscationHandler(createRequestObfuscationHandler());
+    } else {
+      Bugfender.setNetworkLoggingRequestObfuscationHandler(null);
+    }
+  }
+
+  @ReactMethod
+  public void setNetworkLoggingResponseObfuscationHandlerEnabled(boolean enabled) {
+    if (enabled) {
+      Bugfender.setNetworkLoggingResponseObfuscationHandler(createResponseObfuscationHandler());
+    } else {
+      Bugfender.setNetworkLoggingResponseObfuscationHandler(null);
+    }
+  }
+
+  @ReactMethod
+  public void completeNetworkObfuscation(String requestId, ReadableMap result) {
+    if (requestId == null) {
+      return;
+    }
+    PendingObfuscation pending = pendingObfuscations.get(requestId);
+    if (pending != null) {
+      pending.result.set(result);
+      pending.latch.countDown();
+    }
+  }
+
+  private NetworkLoggingRequestObfuscationHandler createRequestObfuscationHandler() {
+    return (url, headers, body) -> {
+      WritableMap args = Arguments.createMap();
+      args.putString("url", url != null ? url : "");
+      args.putMap("headers", toWritableStringMap(headers));
+      if (body != null) {
+        args.putString("body", body);
+      } else {
+        args.putNull("body");
+      }
+
+      ReadableMap response = invokeJsObfuscation(OBFUSCATE_REQUEST_EVENT, args);
+      if (response == null) {
+        return new NetworkRequestData(url, headers, body);
+      }
+
+      String obfuscatedUrl = response.hasKey("url") && !response.isNull("url")
+        ? response.getString("url")
+        : url;
+      Map<String, String> obfuscatedHeaders = headersFromReadable(
+        response.hasKey("headers") ? response.getMap("headers") : null
+      );
+      String obfuscatedBody = null;
+      if (response.hasKey("body") && !response.isNull("body")
+        && response.getType("body") == ReadableType.String) {
+        obfuscatedBody = response.getString("body");
+      }
+      return new NetworkRequestData(obfuscatedUrl, obfuscatedHeaders, obfuscatedBody);
+    };
+  }
+
+  private NetworkLoggingResponseObfuscationHandler createResponseObfuscationHandler() {
+    return (headers, body) -> {
+      WritableMap args = Arguments.createMap();
+      args.putMap("headers", toWritableStringMap(headers));
+      if (body != null) {
+        args.putString("body", body);
+      } else {
+        args.putNull("body");
+      }
+
+      ReadableMap response = invokeJsObfuscation(OBFUSCATE_RESPONSE_EVENT, args);
+      if (response == null) {
+        return new NetworkResponseData(headers, body);
+      }
+
+      Map<String, String> obfuscatedHeaders = headersFromReadable(
+        response.hasKey("headers") ? response.getMap("headers") : null
+      );
+      String obfuscatedBody = null;
+      if (response.hasKey("body") && !response.isNull("body")
+        && response.getType("body") == ReadableType.String) {
+        obfuscatedBody = response.getString("body");
+      }
+      return new NetworkResponseData(obfuscatedHeaders, obfuscatedBody);
+    };
+  }
+
+  @Nullable
+  private ReadableMap invokeJsObfuscation(String eventName, WritableMap body) {
+    // Avoid deadlocking the UI thread while waiting for JS.
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+      return null;
+    }
+
+    ReactApplicationContext context = getReactApplicationContext();
+    if (context == null || !context.hasActiveReactInstance()) {
+      return null;
+    }
+
+    String requestId = UUID.randomUUID().toString();
+    PendingObfuscation pending = new PendingObfuscation();
+    pendingObfuscations.put(requestId, pending);
+    body.putString("requestId", requestId);
+
+    new Handler(Looper.getMainLooper()).post(() -> {
+      ReactApplicationContext reactContext = getReactApplicationContext();
+      if (reactContext != null && reactContext.hasActiveReactInstance()) {
+        reactContext
+          .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+          .emit(eventName, body);
+      } else {
+        pending.latch.countDown();
+      }
+    });
+
+    try {
+      if (!pending.latch.await(3, TimeUnit.SECONDS)) {
+        pendingObfuscations.remove(requestId);
+        return null;
+      }
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      pendingObfuscations.remove(requestId);
+      return null;
+    }
+
+    pendingObfuscations.remove(requestId);
+    return pending.result.get();
+  }
+
+  private static WritableMap toWritableStringMap(@Nullable Map<String, String> headers) {
+    WritableMap map = Arguments.createMap();
+    if (headers == null) {
+      return map;
+    }
+    for (Map.Entry<String, String> entry : headers.entrySet()) {
+      if (entry.getKey() != null) {
+        map.putString(entry.getKey(), entry.getValue() != null ? entry.getValue() : "");
+      }
+    }
+    return map;
+  }
+
+  private static Map<String, String> headersFromReadable(@Nullable ReadableMap map) {
+    Map<String, String> result = new HashMap<>();
+    if (map == null) {
+      return result;
+    }
+    ReadableMapKeySetIterator iterator = map.keySetIterator();
+    while (iterator.hasNextKey()) {
+      String key = iterator.nextKey();
+      if (map.isNull(key)) {
+        result.put(key, "");
+        continue;
+      }
+      switch (map.getType(key)) {
+        case String:
+          result.put(key, map.getString(key));
+          break;
+        case Number:
+          result.put(key, String.valueOf(map.getDouble(key)));
+          break;
+        case Boolean:
+          result.put(key, String.valueOf(map.getBoolean(key)));
+          break;
+        default:
+          result.put(key, "");
+          break;
+      }
+    }
+    return result;
   }
 
   private static List<String> toStringList(ReadableArray array) {

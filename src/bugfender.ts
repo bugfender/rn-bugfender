@@ -1,4 +1,4 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import {
   LogLevel,
   PrintToConsole,
@@ -15,6 +15,16 @@ import type { ISDKOptions } from './types/sdk-options';
 import type { UserFeedbackOptions } from './user-feedback';
 import { DefaultUserFeedbackOptions } from './user-feedback';
 import { SDKOptions } from './sdk-options';
+import type {
+  NetworkHeaders,
+  NetworkLoggingRequestObfuscationHandler,
+  NetworkLoggingResponseObfuscationHandler,
+  NetworkRequestData,
+  NetworkResponseData,
+} from './network-logging.types';
+
+const OBFUSCATE_REQUEST_EVENT = 'BugfenderObfuscateNetworkRequest';
+const OBFUSCATE_RESPONSE_EVENT = 'BugfenderObfuscateNetworkResponse';
 
 const getLinkingError = (): string => {
   const platformMessage = Platform.select({
@@ -46,6 +56,11 @@ class BugfenderClass implements BugfenderFacade {
   private printToConsole = new PrintToConsole(global.console);
   private sdkOptions: SDKOptions = new SDKOptions();
   private initialized = false;
+  private requestObfuscationHandler: NetworkLoggingRequestObfuscationHandler | null =
+    null;
+  private responseObfuscationHandler: NetworkLoggingResponseObfuscationHandler | null =
+    null;
+  private obfuscationListenerInstalled = false;
 
   public async init(options: ISDKOptions): Promise<void> {
     if (!this.initialized) {
@@ -380,6 +395,106 @@ class BugfenderClass implements BugfenderFacade {
     );
     RnBugfender.setNetworkLoggingMaxRequestsPerMinute(count);
   }
+
+  /**
+   * Optional request obfuscation handler applied before a network log is sent.
+   * Pass `null` to clear the handler.
+   */
+  public setNetworkLoggingRequestObfuscationHandler(
+    handler: NetworkLoggingRequestObfuscationHandler | null
+  ): void {
+    this.printToConsole.info('Set network logging request obfuscation handler');
+    this.requestObfuscationHandler = handler;
+    if (handler) {
+      this.ensureObfuscationListener();
+    }
+    RnBugfender.setNetworkLoggingRequestObfuscationHandlerEnabled(
+      handler != null
+    );
+  }
+
+  /**
+   * Optional response obfuscation handler applied before a network log is sent.
+   * Pass `null` to clear the handler.
+   */
+  public setNetworkLoggingResponseObfuscationHandler(
+    handler: NetworkLoggingResponseObfuscationHandler | null
+  ): void {
+    this.printToConsole.info(
+      'Set network logging response obfuscation handler'
+    );
+    this.responseObfuscationHandler = handler;
+    if (handler) {
+      this.ensureObfuscationListener();
+    }
+    RnBugfender.setNetworkLoggingResponseObfuscationHandlerEnabled(
+      handler != null
+    );
+  }
+
+  private ensureObfuscationListener(): void {
+    if (this.obfuscationListenerInstalled) {
+      return;
+    }
+    this.obfuscationListenerInstalled = true;
+
+    const emitter = new NativeEventEmitter(NativeModules.RnBugfender);
+    emitter.addListener(OBFUSCATE_REQUEST_EVENT, (event) => {
+      this.handleObfuscateRequest(event);
+    });
+    emitter.addListener(OBFUSCATE_RESPONSE_EVENT, (event) => {
+      this.handleObfuscateResponse(event);
+    });
+  }
+
+  private handleObfuscateRequest(event: {
+    requestId: string;
+    url?: string;
+    headers?: NetworkHeaders;
+    body?: string | null;
+  }): void {
+    const url = event.url ?? '';
+    const headers = event.headers ?? {};
+    const body = event.body ?? null;
+    let result: NetworkRequestData = { url, headers, body };
+
+    try {
+      if (this.requestObfuscationHandler) {
+        result = this.requestObfuscationHandler(url, { ...headers }, body);
+      }
+    } catch {
+      result = { url, headers: {}, body: null };
+    }
+
+    RnBugfender.completeNetworkObfuscation(event.requestId, result);
+  }
+
+  private handleObfuscateResponse(event: {
+    requestId: string;
+    headers?: NetworkHeaders;
+    body?: string | null;
+  }): void {
+    const headers = event.headers ?? {};
+    const body = event.body ?? null;
+    let result: NetworkResponseData = { headers, body };
+
+    try {
+      if (this.responseObfuscationHandler) {
+        result = this.responseObfuscationHandler({ ...headers }, body);
+      }
+    } catch {
+      result = { headers: {}, body: null };
+    }
+
+    RnBugfender.completeNetworkObfuscation(event.requestId, result);
+  }
 }
 
 export { BugfenderClass, RnBugfender };
+export type {
+  NetworkHeaders,
+  NetworkRequestData,
+  NetworkResponseData,
+  NetworkLoggingRequestObfuscationHandler,
+  NetworkLoggingResponseObfuscationHandler,
+} from './network-logging.types';
