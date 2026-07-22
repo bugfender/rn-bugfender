@@ -1,5 +1,6 @@
 import type { ISDKOptions } from './types/sdk-options';
-import { prepareOptions, validate, ValidationRules } from '@bugfender/common';
+import { prepareOptions, validate } from '@bugfender/common';
+import type { ValidationRules } from '@bugfender/common';
 
 export class SDKOptions {
   protected rules: ValidationRules = {

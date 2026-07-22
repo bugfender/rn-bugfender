@@ -1,13 +1,15 @@
 import { NativeModules, Platform } from 'react-native';
 import {
+  LogLevel,
+  PrintToConsole,
+  format,
+  formatLogEntryText,
+} from '@bugfender/common';
+import type {
   BugfenderFacade,
   DeviceKeyValue,
   LogEntry,
-  LogLevel,
-  PrintToConsole,
   UserFeedbackResult,
-  format,
-  formatLogEntryText,
 } from '@bugfender/common';
 import type { ISDKOptions } from './types/sdk-options';
 import type { UserFeedbackOptions } from './user-feedback';
@@ -311,6 +313,16 @@ class BugfenderClass implements BugfenderFacade {
   public setForceEnabled(enabled: boolean): void {
     this.printToConsole.info(`Set force enabled set to ${enabled}`);
     RnBugfender.setForceEnabled(enabled);
+  }
+
+  /**
+   * Override the SDK type reported to Bugfender. Normally set automatically by the native bridge.
+   */
+  public setSDKType(sdkType: string, version: number): void {
+    this.printToConsole.info(`Set SDK type: ${sdkType} version: ${version}`);
+    if (typeof RnBugfender.setSDKType === 'function') {
+      RnBugfender.setSDKType(sdkType, version);
+    }
   }
 
   /**
