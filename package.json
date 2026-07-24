@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@bugfender/common": "^1.0.0",
-    "@bugfender/sdk": "^4.0.0"
+    "@bugfender/sdk": "^4.0.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.2.0",
@@ -83,7 +83,7 @@
   },
   "peerDependencies": {
     "@bugfender/common": "^1.0.0",
-    "@bugfender/sdk": "^4.0.0",
+    "@bugfender/sdk": "^4.0.1",
     "react": "*",
     "react-native": "*"
   },
