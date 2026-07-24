@@ -45,7 +45,7 @@ export interface Spec extends TurboModule {
     allowlist: ReadonlyArray<string> | null,
     denylist: ReadonlyArray<string> | null
   ): void;
-  setNetworkLoggingMaxRequestsPerMinute(count: Int32 | null): void;
+  setNetworkLoggingMaxRequestsPerMinute(count: Int32): void;
   setNetworkLoggingRequestObfuscationHandlerEnabled(enabled: boolean): void;
   setNetworkLoggingResponseObfuscationHandlerEnabled(enabled: boolean): void;
   completeNetworkObfuscation(requestId: string, result: Object): void;

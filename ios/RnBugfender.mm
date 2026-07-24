@@ -178,7 +178,7 @@ RCT_EXPORT_METHOD(log:(int)lineNumber method:(NSString *)method file:(NSString *
         logLevel = BFLogLevelInfo;
     else if (rawLogLevel == 5)
         logLevel = BFLogLevelFatal;
-    
+
     [Bugfender logWithLineNumber:lineNumber method:method file:file level:logLevel tag:tag message:message];
 }
 
@@ -217,7 +217,7 @@ RCT_EXPORT_METHOD(showUserFeedback:(NSString *)title hint:(NSString *)hint subje
             reject(0, @"Feedback not sent", nil);
         }
     }];
-    
+
     UIViewController* vc = RCTPresentedViewController();
     [vc presentViewController:controller animated:YES completion:nil];
 }
@@ -250,10 +250,15 @@ RCT_EXPORT_METHOD(setNetworkLoggingURLFilter:(NSArray *)allowlist denylist:(NSAr
     }
 }
 
-RCT_EXPORT_METHOD(setNetworkLoggingMaxRequestsPerMinute:(NSNumber *)count)
+RCT_EXPORT_METHOD(setNetworkLoggingMaxRequestsPerMinute:(double)count)
 {
-    if ([Bugfender respondsToSelector:@selector(setNetworkLoggingMaxRequestsPerMinute:)]) {
-        [Bugfender setNetworkLoggingMaxRequestsPerMinute:count];
+    if (![Bugfender respondsToSelector:@selector(setNetworkLoggingMaxRequestsPerMinute:)]) {
+        return;
+    }
+    if (count < 0) {
+        [Bugfender setNetworkLoggingMaxRequestsPerMinute:nil];
+    } else {
+        [Bugfender setNetworkLoggingMaxRequestsPerMinute:@((NSInteger)count)];
     }
 }
 

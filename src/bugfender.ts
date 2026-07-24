@@ -393,7 +393,9 @@ class BugfenderClass implements BugfenderFacade {
     this.printToConsole.info(
       `Set network logging max requests per minute: ${count}`
     );
-    RnBugfender.setNetworkLoggingMaxRequestsPerMinute(count);
+    RnBugfender.setNetworkLoggingMaxRequestsPerMinute(
+      count == null ? -1 : count
+    );
   }
 
   /**

@@ -18,6 +18,7 @@ import com.bugfender.sdk.ui.FeedbackActivity;
 import com.bugfender.sdk.BugfenderOkHttpInterceptor;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -262,8 +263,12 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
   }
 
   @ReactMethod
-  public void setNetworkLoggingMaxRequestsPerMinute(Integer count) {
-    Bugfender.setNetworkLoggingMaxRequestsPerMinute(count);
+  public void setNetworkLoggingMaxRequestsPerMinute(Dynamic count) {
+    if (count == null || count.isNull() || count.asDouble() < 0) {
+      Bugfender.setNetworkLoggingMaxRequestsPerMinute(null);
+    } else {
+      Bugfender.setNetworkLoggingMaxRequestsPerMinute(count.asInt());
+    }
   }
 
   @ReactMethod
