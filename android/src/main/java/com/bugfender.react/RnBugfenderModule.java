@@ -95,7 +95,6 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
 
   @ReactMethod
   public void init(String apiKey, boolean debug) {
-    ensureReactNativeOkHttpInstrumentation();
     Bugfender.init(getReactApplicationContext(), apiKey, debug);
   }
 
@@ -244,6 +243,9 @@ public class RnBugfenderModule extends ReactContextBaseJavaModule implements Act
 
   @ReactMethod
   public void setNetworkLoggingEnabled(boolean enabled) {
+    if (enabled) {
+      ensureReactNativeOkHttpInstrumentation();
+    }
     Bugfender.setNetworkLoggingEnabled(enabled);
   }
 
