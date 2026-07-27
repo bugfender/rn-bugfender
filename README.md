@@ -46,11 +46,50 @@ Bugfender.init({
   // deviceName: 'Anonymous',
   // maximumLocalStorageSize: 5 * 1024 * 1024, // Native specific
   // enableLogcatLogging: false, // Android specific
+  // networkLoggingEnabled: false,
+  // networkLoggingCaptureBodies: false,
+  // networkLoggingCaptureErrorResponseBodies: false,
   // logBrowserEvents: true, // Web specific
   // build: '42', // Web specific
-  // version: '1.0', // Web sprecific
+  // version: '1.0', // Web specific
 });
 ```
+
+### Network logging
+
+Network logging is **opt-in** and disabled by default. When enabled, HTTP requests appear in Bugfender as logs tagged `bf_network`.
+
+```typescript
+Bugfender.setNetworkLoggingEnabled(true);
+// Optional:
+Bugfender.setNetworkLoggingCaptureBodies(false);
+Bugfender.setNetworkLoggingCaptureErrorResponseBodies(true);
+Bugfender.setNetworkLoggingURLFilter(
+  ['https://api.example.com/*'],
+  ['*/secrets/*']
+);
+Bugfender.setNetworkLoggingMaxRequestsPerMinute(60);
+
+// Optional: redact sensitive headers/bodies before they are logged
+Bugfender.setNetworkLoggingRequestObfuscationHandler((url, headers, body) => ({
+  url,
+  headers: { ...headers, authorization: '[REDACTED]' },
+  body,
+}));
+Bugfender.setNetworkLoggingResponseObfuscationHandler((headers, body) => ({
+  headers,
+  body: body ? body.replace(/"token":"[^"]*"/g, '"token":"[REDACTED]"') : null,
+}));
+```
+
+You can also enable it at init time with `networkLoggingEnabled`, `networkLoggingCaptureBodies`, and `networkLoggingCaptureErrorResponseBodies`.
+
+Platform notes:
+
+- **iOS:** URLSession traffic is captured (including React Native `fetch`).
+- **Android:** React Native `fetch`/XHR is instrumented via OkHttp (`android-okhttp` 4.x adapter).
+- **Web:** Uses `@bugfender/sdk` (≥ 4.0.0), which intercepts `fetch` and `XMLHttpRequest`.
+- Requires native Bugfender Android SDK **4.x** (this package pulls `com.bugfender.sdk:android:4.+`).
 
 ## Changelog
 The changelog of the Bugfender Web SDK can be found in ReleaseNotes under the [react-native](https://bugfender.releasenotes.io/tag/react-native) tag. For all the Bugfender product changes please visit the general release notes.

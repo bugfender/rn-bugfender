@@ -38,6 +38,19 @@ export interface Spec extends TurboModule {
   forceSendOnce(): void;
   sendUserFeedback(title: string, text: string): Promise<string>;
   showUserFeedback(title: string, text: string): Promise<string>;
+  setNetworkLoggingEnabled(enabled: boolean): void;
+  setNetworkLoggingCaptureBodies(capture: boolean): void;
+  setNetworkLoggingCaptureErrorResponseBodies(capture: boolean): void;
+  setNetworkLoggingURLFilter(
+    allowlist: ReadonlyArray<string> | null,
+    denylist: ReadonlyArray<string> | null
+  ): void;
+  setNetworkLoggingMaxRequestsPerMinute(count: Int32): void;
+  setNetworkLoggingRequestObfuscationHandlerEnabled(enabled: boolean): void;
+  setNetworkLoggingResponseObfuscationHandlerEnabled(enabled: boolean): void;
+  completeNetworkObfuscation(requestId: string, result: Object): void;
+  addListener(eventName: string): void;
+  removeListeners(count: Int32): void;
 }
 
 export default TurboModuleRegistry.get<Spec>('RnBugfender') as Spec | null;

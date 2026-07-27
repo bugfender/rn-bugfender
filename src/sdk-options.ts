@@ -1,5 +1,6 @@
 import type { ISDKOptions } from './types/sdk-options';
-import { prepareOptions, validate, ValidationRules } from '@bugfender/common';
+import { prepareOptions, validate } from '@bugfender/common';
+import type { ValidationRules } from '@bugfender/common';
 
 export class SDKOptions {
   protected rules: ValidationRules = {
@@ -12,6 +13,9 @@ export class SDKOptions {
     logUIEvents: ['boolean'],
     registerErrorHandler: ['boolean'],
     version: ['string'],
+    networkLoggingEnabled: ['boolean'],
+    networkLoggingCaptureBodies: ['boolean'],
+    networkLoggingCaptureErrorResponseBodies: ['boolean'],
   };
 
   public init(options: ISDKOptions): ISDKOptions {
@@ -29,6 +33,9 @@ export class SDKOptions {
       registerErrorHandler: true,
       enableLogcatLogging: false,
       maximumLocalStorageSize: 5 * 1024 * 1024,
+      networkLoggingEnabled: false,
+      networkLoggingCaptureBodies: false,
+      networkLoggingCaptureErrorResponseBodies: false,
       ...options,
     };
   }

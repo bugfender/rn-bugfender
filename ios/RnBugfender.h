@@ -1,5 +1,6 @@
+#import <React/RCTEventEmitter.h>
 #import <React/RCTBridgeModule.h>
 
-@interface RnBugfender : NSObject <RCTBridgeModule>
+@interface RnBugfender : RCTEventEmitter <RCTBridgeModule>
 
 @end
